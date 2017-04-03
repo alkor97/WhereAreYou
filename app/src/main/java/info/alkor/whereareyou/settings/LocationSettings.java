@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Location-related settings.
  * Created by Marlena on 2017-02-19.
  */
 public class LocationSettings {
@@ -27,5 +28,9 @@ public class LocationSettings {
 
 	public float getMInDistanceInterval(@NonNull DistanceUnit distanceUnit) {
 		return distanceUnit.from(25, DistanceUnit.METERS);
+	}
+
+	public long getMaxAwaitTimeForBetterAccuracyLocation(@NonNull TimeUnit timeUnit) {
+		return timeUnit.convert(5, TimeUnit.SECONDS);
 	}
 }

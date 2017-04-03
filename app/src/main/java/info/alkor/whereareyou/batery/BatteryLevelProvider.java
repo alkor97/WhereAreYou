@@ -6,9 +6,9 @@ import android.os.BatteryManager;
 import android.support.v7.app.AppCompatActivity;
 
 /**
+ * Provider of battery information.
  * Created by Marlena on 2017-03-07.
  */
-
 public class BatteryLevelProvider {
 
 	private final AppCompatActivity activity;

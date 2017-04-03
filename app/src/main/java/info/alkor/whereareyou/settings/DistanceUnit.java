@@ -3,9 +3,9 @@ package info.alkor.whereareyou.settings;
 import android.support.annotation.NonNull;
 
 /**
+ * Distance unit.
  * Created by Marlena on 2017-02-19.
  */
-
 public enum DistanceUnit {
 
 	METERS {
