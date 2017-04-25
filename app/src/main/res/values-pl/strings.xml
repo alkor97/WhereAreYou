@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">WhereAreYou</string>
+	<string name="app_name">Gdzie jesteś?</string>
 	<string name="one_time_location_request">Hej, gdzie jesteś?</string>
 	<string name="husband_where_are_you">Mężu, gdzie jesteś?</string>
 	<string name="wife_where_are_you">Żono, gdzie jesteś?</string>
