@@ -11,7 +11,7 @@ import java.util.Locale;
  */
 public class LocationFormatter {
 	public String getGoogleMapsLocationLink(@NonNull Location location) {
-		return String.format(Locale.US, "https://www.google.com/maps/@%.8f,%.8f,13.0z", location
+		return String.format(Locale.US, "https://www.google.com/maps/place/%.8f,%.8f", location
 				.getLatitude(), location.getLongitude());
 	}
 }

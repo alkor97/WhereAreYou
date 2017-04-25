@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 	tools:context="info.alkor.whereareyou.MainActivity">
 
-	<TextView
-		android:id="@+id/textOut"
-		android:layout_width="wrap_content"
+	<Button
+		android:id="@+id/husbandWhereAreYou"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Hello World!"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent"/>
+		android:onClick="husbandWhereAreYouClicked"
+		android:text="@string/husband_where_are_you"
+		tools:layout_editor_absoluteX="16dp"
+		tools:layout_editor_absoluteY="74dp"/>
 
-</android.support.constraint.ConstraintLayout>
+	<Button
+		android:id="@+id/wifeWhereAreYou"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:onClick="wifeWhereAreYou"
+		android:text="@string/wife_where_are_you"
+		tools:layout_editor_absoluteX="16dp"
+		tools:layout_editor_absoluteY="16dp"/>
+</LinearLayout>
