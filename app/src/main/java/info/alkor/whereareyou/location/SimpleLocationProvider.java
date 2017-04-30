@@ -40,6 +40,13 @@ public class SimpleLocationProvider {
 		}
 	}
 
+	@SuppressWarnings("MissingPermission")
+	public void requestSingleUpdate(@NonNull LocationListener locationListener) {
+		for (String provider : settings.getLocationProviders()) {
+			locationManager.requestSingleUpdate(provider, locationListener, null);
+		}
+	}
+
 	@Requirements({"UC-CANCEL-LOCATION-UPDATES"})
 	@SuppressWarnings("MissingPermission")
 	public void cancelLocationUpdates(LocationListener locationListener) {

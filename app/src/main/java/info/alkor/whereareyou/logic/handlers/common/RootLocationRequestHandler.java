@@ -7,6 +7,7 @@ import info.alkor.whereareyou.logic.ExecutionContext;
 import info.alkor.whereareyou.logic.LocationRequest;
 import info.alkor.whereareyou.logic.LocationRequestDecoder;
 import info.alkor.whereareyou.logic.handlers.onetime.OneTimeLocationProvider;
+import info.alkor.whereareyou.settings.CustomLogger;
 import info.alkor.whereareyou.settings.UserManager;
 
 /**
@@ -32,12 +33,14 @@ public class RootLocationRequestHandler {
 			LocationRequestHandler requestHandler = getLocationRequestHandler(request);
 			LocationResponseHandler responseHandler = getLocationResponseHandler();
 			requestHandler.handleLocationRequest(request, responseHandler);
+		} else {
+			CustomLogger.incoming(request.getOriginAddress() + " not on white list, ignoring");
 		}
 	}
 
 	private LocationResponseHandler getLocationResponseHandler() {
 		if (responseHandler == null) {
-			responseHandler = new DefaultLocationResponseHandler(context.getApplicationSettings());
+			responseHandler = new DefaultLocationResponseHandler(context);
 		}
 		return responseHandler;
 	}

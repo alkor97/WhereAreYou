@@ -3,6 +3,7 @@ package info.alkor.whereareyou.logic;
 import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.location.LocationFormatter;
+import info.alkor.whereareyou.location.StreetViewLocationFormatter;
 
 /**
  * Location response encoder.
@@ -11,10 +12,15 @@ import info.alkor.whereareyou.location.LocationFormatter;
 public class LocationResponseEncoder {
 
 	private final LocationFormatter formatter = new LocationFormatter();
+	private final StreetViewLocationFormatter formatter2 = new StreetViewLocationFormatter();
 
 	public
 	@NonNull
 	String encodeLocationResponse(@NonNull LocationResponse locationResponse) {
-		return formatter.getGoogleMapsLocationLink(locationResponse.getLocation());
+		return formatter.format(locationResponse.getLocation());
+	}
+
+	public String encodeStreetViewLocationResponse(LocationResponse locationResponse) {
+		return formatter2.format(locationResponse.getLocation());
 	}
 }

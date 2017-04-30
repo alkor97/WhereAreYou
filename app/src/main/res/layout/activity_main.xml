@@ -8,20 +8,36 @@
 	tools:context="info.alkor.whereareyou.MainActivity">
 
 	<Button
-		android:id="@+id/husbandWhereAreYou"
+		android:id="@+id/locatePhone"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:onClick="husbandWhereAreYouClicked"
-		android:text="@string/husband_where_are_you"
-		tools:layout_editor_absoluteX="16dp"
-		tools:layout_editor_absoluteY="74dp"/>
-
-	<Button
-		android:id="@+id/wifeWhereAreYou"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:onClick="wifeWhereAreYou"
-		android:text="@string/wife_where_are_you"
+		android:onClick="locatePhone"
+		android:text="@string/locate_phone"
 		tools:layout_editor_absoluteX="16dp"
 		tools:layout_editor_absoluteY="16dp"/>
+
+	<Button
+		android:id="@+id/refreshButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:onClick="refreshLogs"
+		android:text="@string/refresh"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/MyLog"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				/>
+
+		</LinearLayout>
+	</ScrollView>
 </LinearLayout>

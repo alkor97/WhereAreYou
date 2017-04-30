@@ -13,6 +13,7 @@ import info.alkor.whereareyou.common.Requirements;
 import info.alkor.whereareyou.logic.ExecutionContext;
 import info.alkor.whereareyou.logic.handlers.common.RootLocationRequestHandler;
 import info.alkor.whereareyou.settings.ApplicationSettings;
+import info.alkor.whereareyou.settings.CustomLogger;
 import info.alkor.whereareyou.settings.LocationSettings;
 import info.alkor.whereareyou.settings.UserManager;
 
@@ -28,7 +29,10 @@ public class SmsReceiver extends BroadcastReceiver {
 		final SmsMessage message = getMessage(intent);
 		if (message != null) {
 			getLocationRequestHandler(context).handleLocationRequest(message);
+		} else {
+			CustomLogger.incoming("unable to extract body from message, ignoring");
 		}
+		CustomLogger.incoming("processing finished");
 	}
 
 	private RootLocationRequestHandler getLocationRequestHandler(Context context) {

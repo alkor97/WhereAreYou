@@ -2,7 +2,6 @@ package info.alkor.whereareyou.logic;
 
 import android.support.annotation.NonNull;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +27,13 @@ public class LocationRequestDecoder {
 	@NonNull
 	LocationRequest decodeLocationRequest(@NonNull SmsMessage message) {
 		String request = getBody(message);
-		LocationRequest.Type type = mapping.get(request);
-		Log.i("incoming", request + " mapped to " + type);
+		LocationRequest.Type type = parse(request);
 		return new LocationRequest(message.getOriginatingAddress(), type);
+	}
+
+	private LocationRequest.Type parse(String request) {
+		LocationRequest.Type type = mapping.get(request);
+		return type != null ? type : LocationRequest.Type.UNKNOWN;
 	}
 
 	private String getBody(SmsMessage message) {

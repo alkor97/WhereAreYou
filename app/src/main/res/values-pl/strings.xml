@@ -2,6 +2,6 @@
 <resources>
 	<string name="app_name">Gdzie jesteś?</string>
 	<string name="one_time_location_request">Hej, gdzie jesteś?</string>
-	<string name="husband_where_are_you">Mężu, gdzie jesteś?</string>
-	<string name="wife_where_are_you">Żono, gdzie jesteś?</string>
+	<string name="locate_phone">Zlokalizuj&#8230;</string>
+	<string name="refresh">Odśwież</string>
 </resources>

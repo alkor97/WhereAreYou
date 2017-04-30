@@ -23,14 +23,14 @@ public class LocationSettings {
 
 	@RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
 	public long getMinTimeInterval(@NonNull TimeUnit timeUnit) {
-		return timeUnit.convert(5, TimeUnit.MINUTES);
+		return timeUnit.convert(1, TimeUnit.MINUTES);
 	}
 
 	public float getMInDistanceInterval(@NonNull DistanceUnit distanceUnit) {
-		return distanceUnit.from(25, DistanceUnit.METERS);
+		return distanceUnit.from(10, DistanceUnit.METERS);
 	}
 
-	public long getMaxAwaitTimeForBetterAccuracyLocation(@NonNull TimeUnit timeUnit) {
+	public long getMaxAwaitTimeForBetterLocationAccuracy(@NonNull TimeUnit timeUnit) {
 		return timeUnit.convert(5, TimeUnit.SECONDS);
 	}
 }
