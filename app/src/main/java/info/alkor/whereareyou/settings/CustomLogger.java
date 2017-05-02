@@ -1,11 +1,17 @@
 package info.alkor.whereareyou.settings;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Custom logger.
  * Created by Marlena on 2017-04-26.
  */
 public class CustomLogger {
 
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss", Locale.US);
 	private static StringBuilder sb;
 
 	public static void clear() {
@@ -35,6 +41,7 @@ public class CustomLogger {
 		if (sb == null) {
 			clear();
 		}
-		sb.append(tag).append(' ').append(message).append('\n');
+		sb.append(DATE_FORMAT.format(new Date())).append(' ').append(tag).append(' ').append
+				(message).append('\n');
 	}
 }
