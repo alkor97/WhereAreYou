@@ -1,12 +1,14 @@
 package info.alkor.whereareyou;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void locatePhone(View view) {
-		Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+		Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone
+				.CONTENT_URI);
 		startActivityForResult(intent, PICK_CONTACT);
 	}
 
@@ -53,41 +56,38 @@ public class MainActivity extends AppCompatActivity {
 
 		if (PICK_CONTACT == requestCode && Activity.RESULT_OK == resultCode) {
 			final Uri uri = data.getData();
-			Cursor contacts = null;
+			Cursor cursor = null;
 			try {
-				contacts = getContentResolver().query(uri, null, ContactsContract.Contacts
-						.HAS_PHONE_NUMBER + "=1", null, null);
-				if (contacts != null && contacts.moveToFirst()) {
-					handlePhone(contacts);
+				cursor = getContentResolver().query(uri, null, null, null, null);
+				if (cursor != null) {
+					final int displayNameIdx = cursor.getColumnIndex(ContactsContract
+							.CommonDataKinds.Phone.DISPLAY_NAME);
+					final int phoneIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds
+							.Phone.DATA);
+
+					if (cursor.moveToFirst()) {
+						String displayName = cursor.getString(displayNameIdx);
+						String phoneNumber = cursor.getString(phoneIdx).replaceAll("\\s+", "");
+						confirmLocationRequest(displayName, phoneNumber);
+					}
 				}
 			} finally {
-				if (contacts != null) {
-					contacts.close();
+				if (cursor != null) {
+					cursor.close();
 				}
 			}
 		}
 	}
 
-	private void handlePhone(Cursor contacts) {
-		final String id = contacts.getString(contacts.getColumnIndex(ContactsContract.Contacts
-				._ID));
-		Cursor phones = null;
-		try {
-			phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone
-					.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" +
-					id, null, null);
-			if (phones != null && phones.moveToFirst()) {
-				String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract
-						.CommonDataKinds.Phone.NUMBER));
-				String displayName = contacts.getString(contacts.getColumnIndex(ContactsContract
-						.CommonDataKinds.Phone.DISPLAY_NAME));
+	private void confirmLocationRequest(final String displayName, final String phoneNumber) {
+		new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setMessage
+				(getString(R.string.confirm_locate_phone, displayName, phoneNumber))
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
 				requestLocationOf(displayName, phoneNumber);
 			}
-		} finally {
-			if (phones != null) {
-				phones.close();
-			}
-		}
+		}).setNegativeButton(android.R.string.no, null).show();
 	}
 
 	private void requestLocationOf(String displayName, String phoneNumber) {

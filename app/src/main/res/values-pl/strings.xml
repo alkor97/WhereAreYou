@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">Gdzie jesteś?</string>
 	<string name="one_time_location_request">Hej, gdzie jesteś?</string>
-	<string name="locate_phone">Zlokalizuj&#8230;</string>
+	<string name="locate_phone">Zlokalizuj osobę&#8230;</string>
 	<string name="refresh">Odśwież</string>
+	<string name="confirm_locate_phone">Zlokalizować telefon %2$s %1$s?</string>
 </resources>
