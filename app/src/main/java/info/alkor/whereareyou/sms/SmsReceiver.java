@@ -55,6 +55,11 @@ public class SmsReceiver extends BroadcastReceiver {
 			public ApplicationSettings getApplicationSettings() {
 				return new ApplicationSettings(new LocationSettings(), new UserManager());
 			}
+
+			@Override
+			public Context getContext() {
+				return context;
+			}
 		};
 	}
 

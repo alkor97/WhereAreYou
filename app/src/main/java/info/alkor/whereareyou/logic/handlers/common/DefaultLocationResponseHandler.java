@@ -2,6 +2,8 @@ package info.alkor.whereareyou.logic.handlers.common;
 
 import android.support.annotation.NonNull;
 
+import info.alkor.whereareyou.batery.BatteryLevel;
+import info.alkor.whereareyou.batery.BatteryLevelProvider;
 import info.alkor.whereareyou.logic.ExecutionContext;
 import info.alkor.whereareyou.logic.LocationResponse;
 import info.alkor.whereareyou.logic.LocationResponseEncoder;
@@ -18,22 +20,28 @@ class DefaultLocationResponseHandler implements LocationResponseHandler {
 	private final SmsSender sender = new SmsSender();
 	private final LocationResponseEncoder encoder = new LocationResponseEncoder();
 	private final UserManager userManager;
+	private final BatteryLevelProvider batteryLevelProvider;
 
 	DefaultLocationResponseHandler(@NonNull ExecutionContext context) {
 		this.userManager = context.getApplicationSettings().getUserManager();
+		this.batteryLevelProvider = new BatteryLevelProvider(context);
 	}
 
 	@Override
 	public void handleLocationResponse(@NonNull LocationResponse response) {
 		if (userManager.canAccessLocation(response.getDestinationAddress())) {
-			sender.send(response.getDestinationAddress(), encoder.encodeLocationResponse
-					(response));
+			sender.send(response.getDestinationAddress(), encoder.encodeLocationResponse(response,
+					getBatteryLevel()));
 			if (response.getLocation().hasBearing()) {
 				sender.send(response.getDestinationAddress(), encoder
-						.encodeStreetViewLocationResponse(response));
+						.encodeStreetViewLocationResponse(response, getBatteryLevel()));
 			}
 		} else {
 			CustomLogger.outgoing("destination not on white list, ignoring");
 		}
+	}
+
+	private BatteryLevel getBatteryLevel() {
+		return batteryLevelProvider.getBatteryLevel();
 	}
 }

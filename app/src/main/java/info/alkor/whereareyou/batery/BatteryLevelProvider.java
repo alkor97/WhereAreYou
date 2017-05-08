@@ -1,9 +1,11 @@
 package info.alkor.whereareyou.batery;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.BatteryManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+
+import info.alkor.whereareyou.logic.ExecutionContext;
 
 /**
  * Provider of battery information.
@@ -11,22 +13,20 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class BatteryLevelProvider {
 
-	private final AppCompatActivity activity;
+	private final Context context;
 	private Intent batteryStatus;
 
-	public BatteryLevelProvider(AppCompatActivity activity) {
-		this.activity = activity;
+	public BatteryLevelProvider(@NonNull ExecutionContext context) {
+		this.context = context.getContext();
 	}
 
-	public float getCurrentBatteryLevel() {
-		int level = getBatteryStatus().getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-		int scale = getBatteryStatus().getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-		return level / (float) scale;
+	public BatteryLevel getBatteryLevel() {
+		return new BatteryLevel(getBatteryStatus());
 	}
 
 	private Intent getBatteryStatus() {
 		if (batteryStatus == null) {
-			batteryStatus = activity.registerReceiver(null, new IntentFilter(Intent
+			batteryStatus = context.registerReceiver(null, new IntentFilter(Intent
 					.ACTION_BATTERY_CHANGED));
 		}
 		return batteryStatus;

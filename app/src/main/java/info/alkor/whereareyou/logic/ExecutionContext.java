@@ -1,5 +1,6 @@
 package info.alkor.whereareyou.logic;
 
+import android.content.Context;
 import android.location.LocationManager;
 
 import info.alkor.whereareyou.settings.ApplicationSettings;
@@ -14,4 +15,6 @@ public interface ExecutionContext {
 	LocationManager getLocationManager();
 
 	ApplicationSettings getApplicationSettings();
+
+	Context getContext();
 }
