@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.batery.BatteryLevel;
 import info.alkor.whereareyou.batery.BatteryLevelFormatter;
-import info.alkor.whereareyou.location.LocationFormatter;
+import info.alkor.whereareyou.location.SimpleLocationFormatter;
 import info.alkor.whereareyou.location.StreetViewLocationFormatter;
 
 /**
@@ -13,7 +13,7 @@ import info.alkor.whereareyou.location.StreetViewLocationFormatter;
  */
 public class LocationResponseEncoder {
 
-	private final LocationFormatter formatter = new LocationFormatter();
+	private final SimpleLocationFormatter formatter = new SimpleLocationFormatter();
 	private final StreetViewLocationFormatter formatter2 = new StreetViewLocationFormatter();
 	private final BatteryLevelFormatter batteryLevelFormatter = new BatteryLevelFormatter();
 

@@ -20,8 +20,8 @@ import info.alkor.whereareyou.sms.SmsSender;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final int PICK_CONTACT = 1;
-	private final PermissionRequester permissionRequester = new PermissionRequester(this);
+    private static final int PICK_CONTACT_TO_LOCATE = 1;
+    private final PermissionRequester permissionRequester = new PermissionRequester(this);
 	private final SmsSender sender = new SmsSender();
 
 	@Override
@@ -46,37 +46,41 @@ public class MainActivity extends AppCompatActivity {
 	public void locatePhone(View view) {
 		Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone
 				.CONTENT_URI);
-		startActivityForResult(intent, PICK_CONTACT);
-	}
+        startActivityForResult(intent, PICK_CONTACT_TO_LOCATE);
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (PICK_CONTACT == requestCode && Activity.RESULT_OK == resultCode) {
-			final Uri uri = data.getData();
-			Cursor cursor = null;
-			try {
-				cursor = getContentResolver().query(uri, null, null, null, null);
-				if (cursor != null) {
-					final int displayNameIdx = cursor.getColumnIndex(ContactsContract
-							.CommonDataKinds.Phone.DISPLAY_NAME);
-					final int phoneIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds
-							.Phone.DATA);
-
-					if (cursor.moveToFirst()) {
-						String displayName = cursor.getString(displayNameIdx);
-						String phoneNumber = cursor.getString(phoneIdx).replaceAll("\\s+", "");
-						confirmLocationRequest(displayName, phoneNumber);
-					}
-				}
-			} finally {
-				if (cursor != null) {
-					cursor.close();
-				}
-			}
-		}
+        if (PICK_CONTACT_TO_LOCATE == requestCode && Activity.RESULT_OK == resultCode) {
+            handlePhoneSelectionForLocation(data);
+        }
 	}
+
+    private void handlePhoneSelectionForLocation(Intent data) {
+        final Uri uri = data.getData();
+        Cursor cursor = null;
+        try {
+            cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                final int displayNameIdx = cursor.getColumnIndex(ContactsContract
+                        .CommonDataKinds.Phone.DISPLAY_NAME);
+                final int phoneIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds
+                        .Phone.DATA);
+
+                if (cursor.moveToFirst()) {
+                    String displayName = cursor.getString(displayNameIdx);
+                    String phoneNumber = cursor.getString(phoneIdx).replaceAll("\\s+", "");
+                    confirmLocationRequest(displayName, phoneNumber);
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
 	private void confirmLocationRequest(final String displayName, final String phoneNumber) {
 		new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setMessage
