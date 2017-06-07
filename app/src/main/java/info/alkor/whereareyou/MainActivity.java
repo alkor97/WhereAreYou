@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.Map;
 
@@ -95,10 +94,5 @@ public class MainActivity extends AppCompatActivity {
 		CustomLogger.clear();
 		CustomLogger.requesting("location of " + phoneNumber + " (" + displayName + ")");
 		// TODO: add request indication to list
-	}
-
-	public void refreshLogs(View view) {
-		final TextView myLog = (TextView) findViewById(R.id.MyLog);
-		myLog.setText(CustomLogger.get());
 	}
 }
