@@ -10,19 +10,31 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
 import info.alkor.whereareyou.settings.CustomLogger;
 import info.alkor.whereareyou.sms.SmsSender;
+import info.alkor.whereareyou.ui.LocationAction;
+import info.alkor.whereareyou.ui.LocationActionAdapter;
+import info.alkor.whereareyou.ui.LocationActionList;
+import info.alkor.whereareyou.ui.LocationActionSide;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PICK_CONTACT_TO_LOCATE = 1;
     private final PermissionRequester permissionRequester = new PermissionRequester(this);
 	private final SmsSender sender = new SmsSender();
+	private RecyclerView view;
+    private LocationActionAdapter adapter;
+	private final LocationActionList locationActions = new LocationActionList();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,15 @@ public class MainActivity extends AppCompatActivity {
 			}
 		};
 		permissionRequester.requestAllPermissions(callback);
-	}
+
+        view = (RecyclerView) findViewById(R.id.locationActions);
+        view.setHasFixedSize(true);
+        view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        view.setItemAnimator(new DefaultItemAnimator());
+
+        adapter = new LocationActionAdapter(locationActions);
+        view.setAdapter(adapter);
+    }
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -97,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
 		sender.send(phoneNumber, this.getString(R.string.one_time_location_request));
 		CustomLogger.clear();
 		CustomLogger.requesting("location of " + phoneNumber + " (" + displayName + ")");
-		// TODO: add request indication to list
+
+		final LocationActionSide provider = LocationActionSide.provider(displayName, phoneNumber);
+		final int idx = locationActions.addAction(new LocationAction(provider));
+        adapter.notifyItemInserted(idx);
 	}
 }

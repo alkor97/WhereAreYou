@@ -2,6 +2,6 @@
 	<string name="app_name">Where are you?</string>
 	<string name="one_time_location_request">Hey, where are you?</string>
 	<string name="locate_phone">Locate person&#8230;</string>
-	<string name="refresh">Refresh</string>
 	<string name="confirm_locate_phone">Locate %1$s\'s phone %2$s?</string>
+	<string name="row_main_coords">Coordinates</string>
 </resources>

@@ -33,7 +33,7 @@ public class LocationRequestDecoder {
 
 	private LocationRequest.Type parse(String request) {
 		LocationRequest.Type type = mapping.get(request);
-		return type != null ? type : LocationRequest.Type.UNKNOWN;
+		return type != null ? type : LocationRequest.Type.RESPONSE;
 	}
 
 	private String getBody(SmsMessage message) {

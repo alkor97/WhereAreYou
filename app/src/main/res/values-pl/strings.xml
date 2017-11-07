@@ -4,4 +4,5 @@
 	<string name="one_time_location_request">Hej, gdzie jesteś?</string>
 	<string name="locate_phone">Zlokalizuj osobę&#8230;</string>
 	<string name="confirm_locate_phone">Zlokalizować telefon %2$s (%1$s)?</string>
+    <string name="row_main_coords">Koordynaty</string>
 </resources>

@@ -29,6 +29,6 @@ public class LocationRequest {
 	 * Created by Marlena on 2017-04-01.
 	 */
 	public enum Type {
-		UNKNOWN, SINGLE
+		UNKNOWN, SINGLE, RESPONSE
 	}
 }
