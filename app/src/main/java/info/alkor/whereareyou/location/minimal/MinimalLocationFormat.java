@@ -1,7 +1,7 @@
 package info.alkor.whereareyou.location.minimal;
 
 /**
- * Format of mininmal location description.
+ * Format of minimal location description.
  * Created by Marlena on 2017-06-12.
  */
 class MinimalLocationFormat {

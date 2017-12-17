@@ -24,6 +24,10 @@ public class LocationResponse {
 		return request.getOriginAddress();
 	}
 
+	public String getDestinationName() {
+	    return request.getOriginName();
+    }
+
 	public Location getLocation() {
 		return location;
 	}

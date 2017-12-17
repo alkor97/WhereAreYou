@@ -1,11 +1,9 @@
 package info.alkor.whereareyou.logic;
 
-import android.support.annotation.NonNull;
+import java.net.URLEncoder;
 
-import info.alkor.whereareyou.batery.BatteryLevel;
 import info.alkor.whereareyou.batery.BatteryLevelFormatter;
-import info.alkor.whereareyou.location.SimpleLocationFormatter;
-import info.alkor.whereareyou.location.StreetViewLocationFormatter;
+import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
 
 /**
  * Location response encoder.
@@ -13,25 +11,15 @@ import info.alkor.whereareyou.location.StreetViewLocationFormatter;
  */
 public class LocationResponseEncoder {
 
-	private final SimpleLocationFormatter formatter = new SimpleLocationFormatter();
-	private final StreetViewLocationFormatter formatter2 = new StreetViewLocationFormatter();
-	private final BatteryLevelFormatter batteryLevelFormatter = new BatteryLevelFormatter();
+    private final BatteryLevelFormatter batteryLevelFormatter = new BatteryLevelFormatter();
+    private final MinimalLocationFormatter formatter3 = new MinimalLocationFormatter();
 
-	public
-	@NonNull
-	String encodeLocationResponse(@NonNull LocationResponse locationResponse, BatteryLevel
-			batteryLevel) {
-		return format(formatter.format(locationResponse.getLocation()), batteryLevelFormatter
-				.format(batteryLevel));
-	}
-
-	public String encodeStreetViewLocationResponse(LocationResponse locationResponse, BatteryLevel
-			batteryLevel) {
-		return format(formatter2.format(locationResponse.getLocation()), batteryLevelFormatter
-				.format(batteryLevel));
-	}
-
-	private String format(String location, String batteryLevel) {
-		return String.format("%s %s", location, batteryLevel);
-	}
+    public String encodeAlkorInfoLocationResponse(LocationResponse locationResponse) {
+        return String.format("http://loc.alkor.info/?q=%s,%s,%s",
+                formatter3.format(locationResponse.getLocation()),
+                URLEncoder.encode(locationResponse.getDestinationAddress().startsWith("+")
+                        ? ("00" + locationResponse.getDestinationAddress().substring(1))
+                        : locationResponse.getDestinationAddress()),
+                URLEncoder.encode(locationResponse.getDestinationName()));
+    }
 }

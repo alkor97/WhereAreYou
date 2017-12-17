@@ -30,12 +30,7 @@ class DefaultLocationResponseHandler implements LocationResponseHandler {
 	@Override
 	public void handleLocationResponse(@NonNull LocationResponse response) {
 		if (userManager.canAccessLocation(response.getDestinationAddress())) {
-			sender.send(response.getDestinationAddress(), encoder.encodeLocationResponse(response,
-					getBatteryLevel()));
-			if (response.getLocation().hasBearing()) {
-				sender.send(response.getDestinationAddress(), encoder
-						.encodeStreetViewLocationResponse(response, getBatteryLevel()));
-			}
+			sender.send(response.getDestinationAddress(), encoder.encodeAlkorInfoLocationResponse(response));
 		} else {
 			CustomLogger.outgoing("destination not on white list, ignoring");
 		}

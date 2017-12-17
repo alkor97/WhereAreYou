@@ -12,7 +12,7 @@ import info.alkor.whereareyou.location.LocationHelpers;
  * Default location formatter.
  * Created by Marlena on 2017-06-07.
  */
-class MinimalLocationFormatter implements LocationFormatter {
+public class MinimalLocationFormatter implements LocationFormatter {
 
     private final LocationHelpers h = new LocationHelpers();
 

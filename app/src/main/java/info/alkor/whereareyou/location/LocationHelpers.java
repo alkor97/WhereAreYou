@@ -10,14 +10,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Set of location processing helpers.
  * Created by Marlena on 2017-06-07.
  */
 public class LocationHelpers {
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ",
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss",
             Locale.US);
+    private static final TimeZone TZ_UTC = TimeZone.getTimeZone("UTC");
+    static {
+        DATE_FORMAT.setTimeZone(TZ_UTC);
+    }
+
     private static final DecimalFormatSymbols DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols(Locale.US);
     private static final NumberFormat COORDINATE_FORMAT = new DecimalFormat("#.######", DECIMAL_FORMAT_SYMBOLS);
     private static final NumberFormat ACCURACY_FORMAT = NumberFormat.getIntegerInstance(Locale.US);
