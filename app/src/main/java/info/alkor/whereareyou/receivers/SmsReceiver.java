@@ -18,9 +18,10 @@ import android.telephony.SmsMessage;
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.WhereAreYou;
 import info.alkor.whereareyou.common.Requirements;
-import info.alkor.whereareyou.senders.LocationBroadcasts;
+import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.senders.LocationBroadcasts;
 import info.alkor.whereareyou.settings.LocationSettings;
 
 /**
@@ -61,8 +62,12 @@ public class SmsReceiver extends BroadcastReceiver {
             }
         } else {
             MinimalLocationParser parser = new MinimalLocationParser();
-            Location location = parser.parse(message.getMessageBody());
-            flowManager.onIncomingLocationResponse(phone, name, location);
+            try {
+                Location location = parser.parse(message.getMessageBody());
+                flowManager.onIncomingLocationResponse(phone, name, location);
+            } catch (LocationParser.ParsingException e) {
+                // no match in SMS content, ignore
+            }
         }
     }
 

@@ -11,7 +11,7 @@ public interface LocationParser {
     @NonNull
     Location parse(@NonNull String location) throws ParsingException;
 
-    class ParsingException extends RuntimeException {
+    class ParsingException extends Exception {
         public ParsingException() {
         }
 

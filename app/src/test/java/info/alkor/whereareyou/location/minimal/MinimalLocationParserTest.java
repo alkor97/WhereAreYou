@@ -38,17 +38,17 @@ public class MinimalLocationParserTest {
     }
 
     @Test(expected = LocationParser.ParsingException.class)
-    public void testParseEmptyString() {
+    public void testParseEmptyString() throws LocationParser.ParsingException {
         parser.parse("");
     }
 
     @Test(expected = LocationParser.ParsingException.class)
-    public void testParseWithoutCoordinates() {
+    public void testParseWithoutCoordinates() throws LocationParser.ParsingException {
         parser.parse("gps");
     }
 
     @Test
-    public void testParseMinimal() {
+    public void testParseMinimal() throws LocationParser.ParsingException {
         parser.parse(date + ",gps,53.1,14.3,,,,");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
@@ -57,7 +57,7 @@ public class MinimalLocationParserTest {
     }
 
     @Test
-    public void testParseContentWithAltitude() {
+    public void testParseContentWithAltitude() throws LocationParser.ParsingException {
         parser.parse(date + ",gps,53.1,14.3,15,,,");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
@@ -67,7 +67,7 @@ public class MinimalLocationParserTest {
     }
 
     @Test
-    public void testParseContentWithAccuracy() {
+    public void testParseContentWithAccuracy() throws LocationParser.ParsingException {
         parser.parse(date + ",gps,53.1,14.3,15,2,,");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
@@ -78,7 +78,7 @@ public class MinimalLocationParserTest {
     }
 
     @Test
-    public void testParseContentWithBearing() {
+    public void testParseContentWithBearing() throws LocationParser.ParsingException {
         parser.parse(date + ",gps,53.1,14.3,15,2,93,");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
@@ -90,7 +90,7 @@ public class MinimalLocationParserTest {
     }
 
     @Test
-    public void testParseContentWithSpeed() {
+    public void testParseContentWithSpeed() throws LocationParser.ParsingException {
         parser.parse(date + ",gps,53.1,14.3,15,2,93,13.1");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
