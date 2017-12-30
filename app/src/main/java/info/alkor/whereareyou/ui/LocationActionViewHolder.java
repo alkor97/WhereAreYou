@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.net.URLEncoder;
 
 import info.alkor.whereareyou.R;
+import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionSide;
@@ -20,16 +21,17 @@ import info.alkor.whereareyou.model.LocationActionSide;
  * View holder of single location request.
  * Created by Marlena on 2017-06-29.
  */
-public class LocationActionViewHolder extends RecyclerView.ViewHolder {
+class LocationActionViewHolder extends RecyclerView.ViewHolder {
 
     private static final MinimalLocationFormatter FORMATTER = new MinimalLocationFormatter();
     private static final String[] DIRECTIONS = {"↑N", "↗NE", "→E", "↘SE", "↓S", "↙SW", "←W", "↖NW"};
+    private static final TextHelper TEXT_HELPER = new TextHelper();
 
-    public LocationActionViewHolder(View itemView) {
+    LocationActionViewHolder(View itemView) {
         super(itemView);
     }
 
-    public void setLocationAction(LocationAction action) {
+    void setLocationAction(LocationAction action) {
         showTime(action);
         showSide(action);
         final Location location = action.getLocation();
@@ -60,22 +62,11 @@ public class LocationActionViewHolder extends RecyclerView.ViewHolder {
         return "➚";
     }
 
-    private String formatPhone(String phone) {
-        String result = "";
-        int last = 0;
-        for (int i = 0; i < phone.length() / 3; ++i) {
-            int start = last = phone.length() - (i + 1) * 3;
-            int end = start + 3;
-            result = phone.substring(start, end) + (result.length() > 0 ? " " : "") + result;
-        }
-        return phone.substring(0, last) + result;
-    }
-
     private void showSide(LocationAction action) {
         TextView textView = (TextView) itemView.findViewById(R.id.row_main_phone_value);
         String value = getContext().getString(R.string.row_main_side,
                 action.getDisplayName(),
-                formatPhone(action.getPhoneNumber()),
+                TEXT_HELPER.formatPhone(action.getPhoneNumber()),
                 getSideSymbol(action.getSide().getType()));
         textView.setText(value);
     }
@@ -85,7 +76,8 @@ public class LocationActionViewHolder extends RecyclerView.ViewHolder {
         textView.setVisibility(View.VISIBLE);
         String value = getContext().getString(R.string.row_main_position,
                 location.getLatitude(),
-                location.getLongitude());
+                location.getLongitude(),
+                location.getProvider());
         textView.setText(value);
     }
 
@@ -146,7 +138,7 @@ public class LocationActionViewHolder extends RecyclerView.ViewHolder {
 
         private Intent intent;
 
-        public ClickHandler(LocationAction action) {
+        ClickHandler(LocationAction action) {
             String template = getContext().getString(R.string.location_presenter_url,
                     FORMATTER.format(action.getLocation()),
                     URLEncoder.encode(action.getPhoneNumber()),
