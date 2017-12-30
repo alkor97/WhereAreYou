@@ -20,16 +20,16 @@ public class LocationHelpers {
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss",
             Locale.US);
     private static final TimeZone TZ_UTC = TimeZone.getTimeZone("UTC");
-    static {
-        DATE_FORMAT.setTimeZone(TZ_UTC);
-    }
-
     private static final DecimalFormatSymbols DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols(Locale.US);
     private static final NumberFormat COORDINATE_FORMAT = new DecimalFormat("#.######", DECIMAL_FORMAT_SYMBOLS);
     private static final NumberFormat ACCURACY_FORMAT = NumberFormat.getIntegerInstance(Locale.US);
     private static final NumberFormat ALTITUDE_FORMAT = NumberFormat.getIntegerInstance(Locale.US);
     private static final NumberFormat BEARING_FORMAT = NumberFormat.getIntegerInstance(Locale.US);
     private static final NumberFormat SPEED_FORMAT = new DecimalFormat("#.#", DECIMAL_FORMAT_SYMBOLS);
+
+    static {
+        DATE_FORMAT.setTimeZone(TZ_UTC);
+    }
 
     public
     @NonNull

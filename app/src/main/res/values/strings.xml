@@ -3,5 +3,14 @@
 	<string name="one_time_location_request">Hey, where are you?</string>
 	<string name="locate_phone">Locate person&#8230;</string>
 	<string name="confirm_locate_phone">Locate %1$s\'s phone %2$s?</string>
-	<string name="row_main_coords">Coordinates</string>
+	<string name="row_main_side" translatable="false">%3$s %1$s (%2$s)</string>
+	<string name="row_main_position" translatable="false">⌖ %1$.6f %2$.6f</string>
+    <string name="row_main_altitude" translatable="false">↥ %1$.0f %2$s</string>
+    <string name="row_main_accuracy" translatable="false">ø %1$.0f %2$s</string>
+    <string name="row_main_azimuth" translatable="false">%1$.0f° (%2$s)</string>
+    <string name="row_main_speed" translatable="false">➟ %1$.0f %2$s</string>
+    <string name="location_presenter_url" translatable="false">http://loc.alkor.info/?q=%s,%s,%s</string>
+    <string name="app_crash_report_query">Application \'Where are you?\' has crashed. Do you want to send report to developer?</string>
+    <string name="app_yes">Yes</string>
+    <string name="app_no">No</string>
 </resources>

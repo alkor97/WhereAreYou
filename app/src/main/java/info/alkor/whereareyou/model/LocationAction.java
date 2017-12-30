@@ -1,20 +1,22 @@
-package info.alkor.whereareyou.ui;
+package info.alkor.whereareyou.model;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * Location request.
  */
-public class LocationAction {
-    private final long actionId;
+public class LocationAction implements Serializable {
+
     private final LocationActionSide side;
-    private State state;
+    private long actionId = 0;
+    private State state = State.UNINITIALIZED;
     private Location location;
 
-    public static enum State {
-        UNINITIALIZED, QUERIED, ANSWERED
+    public LocationAction(@NonNull LocationActionSide side) {
+        this.side = side;
     }
 
     public State getState() {
@@ -25,21 +27,16 @@ public class LocationAction {
         this.state = state;
     }
 
-    public LocationAction(long actionId, LocationActionSide side) {
-        this.actionId = actionId;
-        this.side = side;
-    }
-
-    public LocationAction(LocationActionSide side) {
-        this(System.currentTimeMillis(), side);
-    }
-
     public LocationActionSide getSide() {
         return side;
     }
 
     public long getActionId() {
         return actionId;
+    }
+
+    void setActionId(long actionId) {
+        this.actionId = actionId;
     }
 
     public String getDisplayName() {
@@ -56,5 +53,13 @@ public class LocationAction {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public long getLocationTime() {
+        return location != null ? location.getTime() : 0;
+    }
+
+    public enum State {
+        UNINITIALIZED, QUERIED, ANSWERED
     }
 }

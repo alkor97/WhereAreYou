@@ -12,7 +12,7 @@ import info.alkor.whereareyou.location.LocationParser;
  * Default location parser.
  * Created by Marlena on 2017-06-07.
  */
-class MinimalLocationParser implements LocationParser {
+public class MinimalLocationParser implements LocationParser {
 
     private final LocationHelpers h = new LocationHelpers();
     private final LocationFactory factory;
@@ -67,28 +67,44 @@ class MinimalLocationParser implements LocationParser {
         assign(location, entries, MinimalLocationFormat.Field.ALTITUDE, new Assigner() {
             @Override
             public Location assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
-                location.setAltitude(h.parseAltitude(entries[field.getPosition()]));
+                try {
+                    location.setAltitude(h.parseAltitude(entries[field.getPosition()]));
+                } catch (ParseException e) {
+                    location.removeAltitude();
+                }
                 return location;
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.ACCURACY, new Assigner() {
             @Override
             public Location assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
-                location.setAccuracy(h.parseAccuracy(entries[field.getPosition()]));
+                try {
+                    location.setAccuracy(h.parseAccuracy(entries[field.getPosition()]));
+                } catch (ParseException e) {
+                    location.removeAccuracy();
+                }
                 return location;
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.BEARING, new Assigner() {
             @Override
             public Location assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
-                location.setBearing(h.parseBearing(entries[field.getPosition()]));
+                try {
+                    location.setBearing(h.parseBearing(entries[field.getPosition()]));
+                } catch (ParseException e) {
+                    location.removeBearing();
+                }
                 return location;
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.SPEED, new Assigner() {
             @Override
             public Location assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
-                location.setSpeed(h.parseSpeed(entries[field.getPosition()]));
+                try {
+                    location.setSpeed(h.parseSpeed(entries[field.getPosition()]));
+                } catch (ParseException e) {
+                    location.removeSpeed();
+                }
                 return location;
             }
         });

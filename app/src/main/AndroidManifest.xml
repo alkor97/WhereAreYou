@@ -12,7 +12,8 @@
         android:icon="@drawable/ic_whereareyou_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".WhereAreYou">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,10 +21,15 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".sms.SmsReceiver"
+            android:name=".receivers.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receivers.LocationUpdateReceiver">
+            <intent-filter>
+                <action android:name="LOCATION_UPDATED"/>
             </intent-filter>
         </receiver>
     </application>

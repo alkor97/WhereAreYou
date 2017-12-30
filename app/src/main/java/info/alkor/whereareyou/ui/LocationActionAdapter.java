@@ -1,14 +1,15 @@
 package info.alkor.whereareyou.ui;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import info.alkor.whereareyou.R;
+import info.alkor.whereareyou.model.LocationAction;
+import info.alkor.whereareyou.model.LocationActionList;
 
 /**
  * Adapter for RecyclerView of location tasks.
@@ -17,9 +18,13 @@ import info.alkor.whereareyou.R;
 public class LocationActionAdapter extends RecyclerView.Adapter<LocationActionViewHolder> {
 
     @NonNull
+    private final Context context;
+
+    @NonNull
     private final LocationActionList locationActions;
 
-    public LocationActionAdapter(@NonNull LocationActionList locationActions) {
+    public LocationActionAdapter(@NonNull Context context, @NonNull LocationActionList locationActions) {
+        this.context = context;
         this.locationActions = locationActions;
     }
 

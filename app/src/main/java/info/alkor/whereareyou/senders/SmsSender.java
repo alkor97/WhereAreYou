@@ -1,10 +1,9 @@
-package info.alkor.whereareyou.sms;
+package info.alkor.whereareyou.senders;
 
 import android.support.annotation.NonNull;
 import android.telephony.SmsManager;
 
 import info.alkor.whereareyou.common.Requirements;
-import info.alkor.whereareyou.settings.CustomLogger;
 
 /**
  * SMS sending utility.
@@ -16,12 +15,11 @@ public class SmsSender {
 
 	/**
 	 * Send SMS with provided content to specified destination.
-	 *  @param destination phone number of message destination
+	 * @param destination phone number of message destination
 	 * @param content     content of message
 	 */
 	@Requirements({"UC-SEND-SMS"})
 	public void send(@NonNull String destination, @NonNull String content) {
 		manager.sendTextMessage(destination, null, content, null, null);
-		CustomLogger.outgoing("\"" + content + "\" to " + destination);
 	}
 }
