@@ -2,6 +2,7 @@ package info.alkor.whereareyou;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraDialog;
@@ -30,6 +31,7 @@ public class WhereAreYou extends Application {
     private LocationActionList model;
     private LocationActionsSender actionsSender;
     private LocationActionManager modelManager;
+    private final Handler handler = new Handler();
 
     @Override
     public void onCreate() {
@@ -62,5 +64,9 @@ public class WhereAreYou extends Application {
 
     public LocationActionManager getModelManager() {
         return modelManager;
+    }
+
+    public Handler getDelayedHandler() {
+        return handler;
     }
 }

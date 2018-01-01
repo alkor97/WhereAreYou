@@ -9,7 +9,10 @@ public interface LocationBroadcasts {
     String LOCATION_ACTION_ADDED = "LOCATION_ACTION_ADDED";
     String LOCATION_ACTION_CHANGED = "LOCATION_ACTION_CHANGED";
 
-    String PHONE = "PHONE";
-    String NAME = "NAME";
+    String DELIVERY_STATUS_UPDATED = "DELIVERY_STATUS_UPDATED";
+
     String POSITION = "POSITION";
+    String ACTION_ID = "ACTION_ID";
+
+    String DELIVERY_STATUS = "DELIVERY_STATUS";
 }

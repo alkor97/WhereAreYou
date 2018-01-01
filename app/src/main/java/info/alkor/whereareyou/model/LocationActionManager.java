@@ -34,4 +34,8 @@ public class LocationActionManager {
     public LocationAction findRelatedNotFulfilledAction(LocationActionSide side) {
         return model.findRelatedNotFulfilledAction(side);
     }
+
+    public LocationAction find(long actionId) {
+        return model.find(actionId);
+    }
 }

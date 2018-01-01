@@ -1,5 +1,7 @@
 package info.alkor.whereareyou.common;
 
+import java.net.URLEncoder;
+
 /**
  * Text helper.
  * Created by Marlena on 2017-12-30.
@@ -19,5 +21,13 @@ public class TextHelper {
         }
         result.insert(0, phone.substring(0, last));
         return result.toString();
+    }
+
+    public String encode(String value) {
+        return value != null ? URLEncoder.encode(value) : "";
+    }
+
+    public String normalizePhone(String phone) {
+        return phone.replaceAll("^0+", "+");
     }
 }

@@ -3,6 +3,7 @@ package info.alkor.whereareyou.senders;
 import android.content.Context;
 
 import info.alkor.whereareyou.R;
+import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionSide;
 
 /**
@@ -18,8 +19,8 @@ public class LocationRequestSender {
         this.context = context;
     }
 
-    public void sendLocationRequest(LocationActionSide provider) {
+    public void sendLocationRequest(LocationAction action) {
         String content = context.getString(R.string.one_time_location_request);
-        sender.send(provider.getPhone(), content);
+        sender.send(context, action, content);
     }
 }

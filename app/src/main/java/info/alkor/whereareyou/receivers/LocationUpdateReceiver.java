@@ -21,21 +21,21 @@ import info.alkor.whereareyou.settings.LocationSettings;
 
 public class LocationUpdateReceiver extends BroadcastReceiver {
 
-    private final Handler async = new Handler();
     private LocationSettings settings;
     private LocationQueryFlowManager flowManager;
+    private Handler async;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        async = getDelayedHandler(context);
         settings = getLocationSettings(context);
         flowManager = new LocationQueryFlowManager(context);
 
         Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
         if (location != null) {
-            String phone = intent.getStringExtra(LocationBroadcasts.PHONE);
-            String name = intent.getStringExtra(LocationBroadcasts.NAME);
+            long actionId = intent.getLongExtra(LocationBroadcasts.ACTION_ID, 0);
 
-            LocationAction action = flowManager.updateLocation(phone, name, location);
+            LocationAction action = flowManager.updateLocation(actionId, location);
             if (action != null) {
                 scheduleUpdateSending(action);
             }
@@ -66,6 +66,10 @@ public class LocationUpdateReceiver extends BroadcastReceiver {
 
     private long getMaxAwaitingTime() {
         return settings.getMaxAwaitTimeForBetterLocationAccuracy(TimeUnit.MILLISECONDS);
+    }
+
+    private Handler getDelayedHandler(Context context) {
+        return getApplication(context).getDelayedHandler();
     }
 
     private LocationSettings getLocationSettings(Context context) {

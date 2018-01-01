@@ -16,12 +16,8 @@ public class LocationActionList {
 
     private final List<LocationAction> actions = new ArrayList<>();
     private final Comparator<LocationAction> comparator = LocationActionComparator.create();
-    private AtomicLong generator = new AtomicLong(0);
 
     public int addAction(LocationAction action) {
-        if (action.getActionId() == 0) {
-            action.setActionId(nextId());
-        }
         int position = Collections.binarySearch(actions, action, comparator);
         if (position < 0) {
             actions.add(-position - 1, action);
@@ -31,19 +27,19 @@ public class LocationActionList {
         return position;
     }
 
-    private long nextId() {
-        long id;
-        do {
-            id = generator.incrementAndGet();
-        } while (id == 0);
-        return id;
-    }
-
     public LocationAction findRelatedNotFulfilledAction(LocationActionSide provider) {
         for (LocationAction locationAction : actions) {
             if (locationAction.getState() == LocationAction.State.QUERIED && locationAction.getSide().getPhone().equals(provider.getPhone())) {
                 return locationAction;
             }
+        }
+        return null;
+    }
+
+    public LocationAction find(long actionId) {
+        int position = Collections.binarySearch(actions, new LocationAction(actionId), comparator);
+        if (position >= 0) {
+            return actions.get(position);
         }
         return null;
     }

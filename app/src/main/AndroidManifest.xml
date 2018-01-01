@@ -32,6 +32,11 @@
                 <action android:name="LOCATION_UPDATED"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.MessageDeliveryStatusReceiver">
+            <intent-filter>
+                <action android:name="DELIVERY_STATUS_UPDATED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

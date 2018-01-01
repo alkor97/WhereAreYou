@@ -9,8 +9,6 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import java.net.URLEncoder;
-
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
@@ -33,6 +31,7 @@ class LocationActionViewHolder extends RecyclerView.ViewHolder {
 
     void setLocationAction(LocationAction action) {
         showTime(action);
+        showDeliveryStatus(action);
         showSide(action);
         final Location location = action.getLocation();
         if (location != null) {
@@ -55,6 +54,20 @@ class LocationActionViewHolder extends RecyclerView.ViewHolder {
         textView.setText(value);
     }
 
+    private String getDeliverStatus(LocationAction.DeliveryStatus status) {
+        if (status == LocationAction.DeliveryStatus.SENT) {
+            return "➜";
+        } else if (status == LocationAction.DeliveryStatus.DELIVERED) {
+            return "✓";
+        }
+        return "…";
+    }
+
+    private void showDeliveryStatus(LocationAction action) {
+        TextView textView = (TextView) itemView.findViewById(R.id.row_main_delivery_value);
+        textView.setText(getDeliverStatus(action.getDeliveryStatus()));
+    }
+
     private String getSideSymbol(LocationActionSide.Type type) {
         if (type == LocationActionSide.Type.REQUESTER) {
             return "➘";
@@ -64,10 +77,17 @@ class LocationActionViewHolder extends RecyclerView.ViewHolder {
 
     private void showSide(LocationAction action) {
         TextView textView = (TextView) itemView.findViewById(R.id.row_main_phone_value);
-        String value = getContext().getString(R.string.row_main_side,
-                action.getDisplayName(),
-                TEXT_HELPER.formatPhone(action.getPhoneNumber()),
-                getSideSymbol(action.getSide().getType()));
+        String value;
+        if (action.getDisplayName() != null) {
+            value = getContext().getString(R.string.row_main_side,
+                    action.getDisplayName(),
+                    TEXT_HELPER.formatPhone(action.getPhoneNumber()),
+                    getSideSymbol(action.getSide().getType()));
+        } else {
+            value = getContext().getString(R.string.row_main_side_without_name,
+                    TEXT_HELPER.formatPhone(action.getPhoneNumber()),
+                    getSideSymbol(action.getSide().getType()));
+        }
         textView.setText(value);
     }
 
@@ -141,8 +161,8 @@ class LocationActionViewHolder extends RecyclerView.ViewHolder {
         ClickHandler(LocationAction action) {
             String template = getContext().getString(R.string.location_presenter_url,
                     FORMATTER.format(action.getLocation()),
-                    URLEncoder.encode(action.getPhoneNumber()),
-                    URLEncoder.encode(action.getDisplayName()));
+                    TEXT_HELPER.encode(action.getPhoneNumber()),
+                    TEXT_HELPER.encode(action.getDisplayName()));
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(template));
         }
 

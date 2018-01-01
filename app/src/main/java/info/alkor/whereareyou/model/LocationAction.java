@@ -2,6 +2,7 @@ package info.alkor.whereareyou.model;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -14,9 +15,24 @@ public class LocationAction implements Serializable {
     private long actionId = 0;
     private State state = State.UNINITIALIZED;
     private Location location;
+    private DeliveryStatus deliveryStatus = DeliveryStatus.PENDING;
 
     public LocationAction(@NonNull LocationActionSide side) {
+        this.actionId = nextId();
         this.side = side;
+    }
+
+    LocationAction(long actionId) {
+        this.actionId = actionId;
+        this.side = null;
+    }
+
+    private static long nextId() {
+        return System.currentTimeMillis();
+    }
+
+    private String name() {
+        return "action " + actionId;
     }
 
     public State getState() {
@@ -25,6 +41,7 @@ public class LocationAction implements Serializable {
 
     public void setState(State state) {
         this.state = state;
+        Log.i(name(), "state " + state);
     }
 
     public LocationActionSide getSide() {
@@ -33,10 +50,6 @@ public class LocationAction implements Serializable {
 
     public long getActionId() {
         return actionId;
-    }
-
-    void setActionId(long actionId) {
-        this.actionId = actionId;
     }
 
     public String getDisplayName() {
@@ -53,13 +66,27 @@ public class LocationAction implements Serializable {
 
     public void setLocation(Location location) {
         this.location = location;
+        Log.i(name(), "location set");
     }
 
     public long getLocationTime() {
         return location != null ? location.getTime() : 0;
     }
 
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+        Log.i(name(), "delivery " + deliveryStatus);
+    }
+
     public enum State {
         UNINITIALIZED, QUERIED, ANSWERED
+    }
+
+    public enum DeliveryStatus {
+        PENDING, SENT, DELIVERED
     }
 }

@@ -1,5 +1,7 @@
 package info.alkor.whereareyou.senders;
 
+import android.content.Context;
+
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
 import info.alkor.whereareyou.model.LocationAction;
 
@@ -9,11 +11,15 @@ import info.alkor.whereareyou.model.LocationAction;
 
 public class LocationResponseSender {
 
+    private final Context context;
     private final SmsSender sender = new SmsSender();
 
+    public LocationResponseSender(Context context) {
+        this.context = context;
+    }
+
     public void sendLocationResponse(LocationAction action) {
-        //String response = String.format("http://loc.alkor.info/?q=%s", responseFormatter.format(location));
         MinimalLocationFormatter responseFormatter = new MinimalLocationFormatter();
-        sender.send(action.getSide().getPhone(), responseFormatter.format(action.getLocation()));
+        sender.send(context, action, responseFormatter.format(action.getLocation()));
     }
 }

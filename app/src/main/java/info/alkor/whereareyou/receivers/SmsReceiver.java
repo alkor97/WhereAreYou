@@ -14,12 +14,14 @@ import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.WhereAreYou;
 import info.alkor.whereareyou.common.Requirements;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
+import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.senders.LocationBroadcasts;
 import info.alkor.whereareyou.settings.LocationSettings;
@@ -47,18 +49,19 @@ public class SmsReceiver extends BroadcastReceiver {
         final String name = getDisplayName(context, phone);
         final String command = getLocationRequestCommand(context);
         if (message.getMessageBody().equals(command)) {
-            flowManager.onIncomingLocationRequest(phone, name);
+            LocationAction action = flowManager.onIncomingLocationRequest(phone, name);
+            // null action means that request of same side is already being processed
+            if (action != null) {
+                LocationManager locationManager = getLocationManager(context);
+                LocationSettings locationSettings = getLocationSettings(context);
 
-            LocationManager locationManager = getLocationManager(context);
-            LocationSettings locationSettings = getLocationSettings(context);
+                Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
+                intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
 
-            Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
-            intent.putExtra(LocationBroadcasts.PHONE, phone);
-            intent.putExtra(LocationBroadcasts.NAME, name);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            for (String provider : locationSettings.getLocationProviders()) {
-                locationManager.requestSingleUpdate(provider, pendingIntent);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                for (String provider : locationSettings.getLocationProviders()) {
+                    locationManager.requestSingleUpdate(provider, pendingIntent);
+                }
             }
         } else {
             MinimalLocationParser parser = new MinimalLocationParser();
@@ -66,6 +69,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 Location location = parser.parse(message.getMessageBody());
                 flowManager.onIncomingLocationResponse(phone, name, location);
             } catch (LocationParser.ParsingException e) {
+                Log.e("parsing", e.getLocalizedMessage());
                 // no match in SMS content, ignore
             }
         }
