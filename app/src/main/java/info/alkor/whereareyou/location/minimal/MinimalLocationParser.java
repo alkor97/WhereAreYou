@@ -112,8 +112,7 @@ public class MinimalLocationParser implements LocationParser {
             } catch (ParseException e) {
                 throw new ParsingException("Error parsing " + field.name() + " '" + entry + "'", e);
             }
-        }
-        if (field.isMandatory()) {
+        } else if (field.isMandatory()) {
             throw new ParsingException("Field " + field.name() + " not present in input");
         }
     }
