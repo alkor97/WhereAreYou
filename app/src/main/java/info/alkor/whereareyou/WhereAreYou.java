@@ -9,6 +9,7 @@ import org.acra.annotation.AcraDialog;
 import org.acra.annotation.AcraMailSender;
 
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.android.SmsHelper;
 import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
 import info.alkor.whereareyou.senders.LocationActionsSender;
@@ -34,6 +35,7 @@ public class WhereAreYou extends Application {
     private LocationActionsSender actionsSender;
     private LocationActionManager modelManager;
     private ContactsHelper contactsHelper;
+    private SmsHelper smsHelper;
 
     @Override
     public void onCreate() {
@@ -77,5 +79,12 @@ public class WhereAreYou extends Application {
             contactsHelper = new ContactsHelper(this);
         }
         return contactsHelper;
+    }
+
+    public SmsHelper getSmsHelper() {
+        if (smsHelper == null) {
+            smsHelper = new SmsHelper();
+        }
+        return smsHelper;
     }
 }
