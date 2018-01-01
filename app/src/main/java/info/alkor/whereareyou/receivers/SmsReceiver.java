@@ -4,20 +4,17 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.WhereAreYou;
+import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.common.Requirements;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
@@ -46,7 +43,7 @@ public class SmsReceiver extends BroadcastReceiver {
         LocationQueryFlowManager flowManager = new LocationQueryFlowManager(context);
 
         final String phone = message.getOriginatingAddress();
-        final String name = getDisplayName(context, phone);
+        final String name = getContactsHelper(context).getDisplayName(phone);
         final String command = getLocationRequestCommand(context);
         if (message.getMessageBody().equals(command)) {
             LocationAction action = flowManager.onIncomingLocationRequest(phone, name);
@@ -58,7 +55,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
                 intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 for (String provider : locationSettings.getLocationProviders()) {
                     locationManager.requestSingleUpdate(provider, pendingIntent);
                 }
@@ -95,24 +92,8 @@ public class SmsReceiver extends BroadcastReceiver {
         return null;
     }
 
-    private String getDisplayName(Context context, String phone) {
-        final Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
-
-        final Cursor contactLookup = context.getContentResolver().query(uri, new String[]{BaseColumns._ID,
-                ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
-
-        try {
-            if (contactLookup != null && contactLookup.getCount() > 0) {
-                contactLookup.moveToNext();
-                return contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-            }
-        } finally {
-            if (contactLookup != null) {
-                contactLookup.close();
-            }
-        }
-
-        return null;
+    private ContactsHelper getContactsHelper(Context context) {
+        return getApplication(context).getContactsHelper();
     }
 
     private LocationManager getLocationManager(Context context) {
