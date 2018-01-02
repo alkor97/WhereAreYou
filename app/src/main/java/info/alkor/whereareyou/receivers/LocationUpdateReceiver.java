@@ -1,12 +1,10 @@
 package info.alkor.whereareyou.receivers;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 
 import java.util.concurrent.TimeUnit;
 
-import info.alkor.whereareyou.WhereAreYou;
 import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.android.receivers.AbstractLocationUpdateReceiver;
 import info.alkor.whereareyou.model.LocationAction;
@@ -59,17 +57,5 @@ public class LocationUpdateReceiver extends AbstractLocationUpdateReceiver {
 
     private long getMaxAwaitingTime() {
         return settings.getMaxAwaitTimeForBetterLocationAccuracy(TimeUnit.MILLISECONDS);
-    }
-
-    private Handler getDelayedHandler(Context context) {
-        return getApplication(context).getDelayedHandler();
-    }
-
-    private LocationSettings getLocationSettings(Context context) {
-        return getApplication(context).getApplicationSettings().getLocationSettings();
-    }
-
-    private WhereAreYou getApplication(Context context) {
-        return (WhereAreYou) context.getApplicationContext();
     }
 }
