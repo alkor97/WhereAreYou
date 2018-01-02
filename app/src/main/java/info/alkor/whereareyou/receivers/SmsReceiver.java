@@ -6,7 +6,6 @@ import android.util.Log;
 import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.android.receivers.AbstractSmsReceiver;
 import info.alkor.whereareyou.location.LocationParser;
-import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.settings.LocationSettings;
@@ -35,7 +34,7 @@ public class SmsReceiver extends AbstractSmsReceiver {
                 }
             }
         } else {
-            MinimalLocationParser parser = new MinimalLocationParser();
+            LocationParser parser = context.getLocationParser();
             try {
                 Location location = parser.parse(messageBody);
                 flowManager.onIncomingLocationResponse(phone, name, location);

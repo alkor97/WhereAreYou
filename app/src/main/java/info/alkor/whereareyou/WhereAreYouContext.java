@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
@@ -44,4 +45,7 @@ public interface WhereAreYouContext {
     boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action);
 
     void sendSms(@NonNull LocationAction action, @NonNull String content);
+
+    @NonNull
+    LocationParser getLocationParser();
 }

@@ -6,13 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.settings.ApplicationSettings;
@@ -51,6 +52,12 @@ public class SmsReceiverTest {
     @Mock
     private LocationSettings mockLocationSettings;
 
+    @Mock
+    private Location mockLocation;
+
+    @Mock
+    private LocationParser mockLocationParser;
+
     private SmsReceiver receiver = new SmsReceiver();
 
     @Before
@@ -59,10 +66,14 @@ public class SmsReceiverTest {
     }
 
     @Test
-    public void ignoreUnrelatedMessages() {
-        when(mockContext.getLocationRequestCommand()).thenReturn("Hey, where are you?");
+    public void ignoreUnrelatedMessages() throws LocationParser.ParsingException {
+        String message = "random text";
 
-        receiver.onReceive(mockContext, "123", "abc", "random text");
+        when(mockContext.getLocationRequestCommand()).thenReturn("Hey, where are you?");
+        when(mockContext.getLocationParser()).thenReturn(mockLocationParser);
+        when(mockLocationParser.parse(message)).thenThrow(new LocationParser.ParsingException("error"));
+
+        receiver.onReceive(mockContext, "123", "abc", message);
 
         verify(mockFlowManager, never()).onIncomingLocationRequest(anyString(), anyString());
         verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
@@ -147,5 +158,20 @@ public class SmsReceiverTest {
             }
         }
         verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
+    }
+
+    @Test
+    public void handleIncomingLocationResponse() throws LocationParser.ParsingException {
+        final String command = "20171231123456,gps,53.1,14.3,15,2,93,13.1";
+        final String phone = "123";
+        final String name = "abc";
+
+        when(mockContext.getLocationParser()).thenReturn(mockLocationParser);
+        when(mockLocationParser.parse(command)).thenReturn(mockLocation);
+
+        receiver.onReceive(mockContext, phone, name, command);
+
+        verify(mockFlowManager).onIncomingLocationResponse(phone, name, mockLocation);
+        verify(mockFlowManager, never()).onIncomingLocationRequest(anyString(), anyString());
     }
 }

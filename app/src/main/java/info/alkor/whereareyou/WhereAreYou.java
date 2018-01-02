@@ -15,6 +15,8 @@ import org.acra.annotation.AcraDialog;
 import org.acra.annotation.AcraMailSender;
 
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.location.LocationParser;
+import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
@@ -45,6 +47,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private LocationActionManager modelManager;
     private ContactsHelper contactsHelper;
     private LocationQueryFlowManager flowManager;
+    private LocationParser locationParser;
 
     @Override
     public void onCreate() {
@@ -149,5 +152,14 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     private PendingIntent getPendingIntent(Intent intent) {
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    @NonNull
+    @Override
+    public LocationParser getLocationParser() {
+        if (locationParser == null) {
+            locationParser = new MinimalLocationParser();
+        }
+        return locationParser;
     }
 }
