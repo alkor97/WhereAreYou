@@ -18,6 +18,7 @@ import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 import info.alkor.whereareyou.settings.LocationSettings;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -42,10 +43,13 @@ public class SmsReceiverTest {
     private LocationAction mockLocationAction;
 
     @Mock
+    private LocationAction mockLocationAction2;
+
+    @Mock
     private ApplicationSettings mockApplicationSettings;
 
     @Mock
-    private LocationSettings mockLockationSettings;
+    private LocationSettings mockLocationSettings;
 
     private SmsReceiver receiver = new SmsReceiver();
 
@@ -75,8 +79,8 @@ public class SmsReceiverTest {
         when(mockContext.getLocationRequestCommand()).thenReturn(command);
         when(mockFlowManager.onIncomingLocationRequest(phone, name)).thenReturn(mockLocationAction);
         when(mockContext.getApplicationSettings()).thenReturn(mockApplicationSettings);
-        when(mockApplicationSettings.getLocationSettings()).thenReturn(mockLockationSettings);
-        when(mockLockationSettings.getLocationProviders()).thenReturn(providers);
+        when(mockApplicationSettings.getLocationSettings()).thenReturn(mockLocationSettings);
+        when(mockLocationSettings.getLocationProviders()).thenReturn(providers);
         for (String provider : providers) {
             when(mockContext.requestSingleLocationUpdate(provider, mockLocationAction)).thenReturn(true);
         }
@@ -106,5 +110,42 @@ public class SmsReceiverTest {
         verify(mockFlowManager, only()).onIncomingLocationRequest(phone, name);
         verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
         verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction.class));
+    }
+
+    @Test
+    public void handleParallelIncomingLocationRequests() {
+        final String command = "Hey, where are you?";
+        final String[] phones = {"123", "456"};
+        final String[] names = {"abc", "def"};
+        final LocationAction[] actions = {mockLocationAction, mockLocationAction2};
+        assertEquals(phones.length, names.length);
+        assertEquals(phones.length, actions.length);
+
+        final Set<String> providers = new HashSet<>(Arrays.asList("gps", "network"));
+
+        when(mockContext.getLocationRequestCommand()).thenReturn(command);
+        for (int i = 0; i < phones.length; ++i) {
+            when(mockFlowManager.onIncomingLocationRequest(phones[i], names[i])).thenReturn(actions[i]);
+        }
+        when(mockContext.getApplicationSettings()).thenReturn(mockApplicationSettings);
+        when(mockApplicationSettings.getLocationSettings()).thenReturn(mockLocationSettings);
+        when(mockLocationSettings.getLocationProviders()).thenReturn(providers);
+        for (int i = 0; i < phones.length; ++i) {
+            for (String provider : providers) {
+                when(mockContext.requestSingleLocationUpdate(provider, actions[i])).thenReturn(true);
+            }
+        }
+
+        for (int i = 0; i < phones.length; ++i) {
+            receiver.onReceive(mockContext, phones[i], names[i], command);
+        }
+
+        for (int i = 0; i < phones.length; ++i) {
+            verify(mockFlowManager).onIncomingLocationRequest(phones[i], names[i]);
+            for (String provider : providers) {
+                verify(mockContext).requestSingleLocationUpdate(provider, actions[i]);
+            }
+        }
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
     }
 }
