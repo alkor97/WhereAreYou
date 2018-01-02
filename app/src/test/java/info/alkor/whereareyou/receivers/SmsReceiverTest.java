@@ -2,6 +2,7 @@ package info.alkor.whereareyou.receivers;
 
 import android.location.Location;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -20,6 +21,7 @@ import info.alkor.whereareyou.settings.LocationSettings;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,9 +49,13 @@ public class SmsReceiverTest {
 
     private SmsReceiver receiver = new SmsReceiver();
 
+    @Before
+    public void beforeTest() {
+        when(mockContext.getLocationQueryFlowManager()).thenReturn(mockFlowManager);
+    }
+
     @Test
     public void ignoreUnrelatedMessages() {
-        when(mockContext.getLocationQueryFlowManager()).thenReturn(mockFlowManager);
         when(mockContext.getLocationRequestCommand()).thenReturn("Hey, where are you?");
 
         receiver.onReceive(mockContext, "123", "abc", "random text");
@@ -66,7 +72,6 @@ public class SmsReceiverTest {
         final String name = "abc";
         final Set<String> providers = new HashSet<>(Arrays.asList("gps", "network"));
 
-        when(mockContext.getLocationQueryFlowManager()).thenReturn(mockFlowManager);
         when(mockContext.getLocationRequestCommand()).thenReturn(command);
         when(mockFlowManager.onIncomingLocationRequest(phone, name)).thenReturn(mockLocationAction);
         when(mockContext.getApplicationSettings()).thenReturn(mockApplicationSettings);
@@ -83,5 +88,23 @@ public class SmsReceiverTest {
             verify(mockContext).requestSingleLocationUpdate(provider, mockLocationAction);
         }
         verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
+    }
+
+    @Test
+    public void ignoreIncomingLocationRequestIfThereIsOneAlreadyInProgress() {
+        final String command = "Hey, where are you?";
+        final String phone = "123";
+        final String name = "abc";
+
+        when(mockContext.getLocationRequestCommand()).thenReturn(command);
+
+        // null indicates that there is one request already processed
+        when(mockFlowManager.onIncomingLocationRequest(phone, name)).thenReturn(null);
+
+        receiver.onReceive(mockContext, phone, name, command);
+
+        verify(mockFlowManager, only()).onIncomingLocationRequest(phone, name);
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
+        verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction.class));
     }
 }
