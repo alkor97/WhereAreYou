@@ -1,6 +1,7 @@
 package info.alkor.whereareyou;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.model.LocationAction;
@@ -16,21 +17,31 @@ import info.alkor.whereareyou.settings.ApplicationSettings;
  */
 public interface WhereAreYouContext {
 
+    @NonNull
     ApplicationSettings getApplicationSettings();
 
+    @NonNull
     LocationActionList getModel();
 
+    @NonNull
     LocationActionsSender getActionsSender();
 
+    @NonNull
     LocationActionManager getModelManager();
 
+    @NonNull
     Handler getDelayedHandler();
 
+    @NonNull
     ContactsHelper getContactsHelper();
 
+    @NonNull
     LocationQueryFlowManager getLocationQueryFlowManager();
 
+    @NonNull
     String getLocationRequestCommand();
 
-    boolean requestSingleLocationUpdate(String provider, LocationAction action);
+    boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action);
+
+    void sendSms(@NonNull LocationAction action, @NonNull String content);
 }

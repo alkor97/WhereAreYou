@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.telephony.SmsManager;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraDialog;
@@ -35,6 +37,7 @@ import info.alkor.whereareyou.settings.UserManager;
 )
 public class WhereAreYou extends Application implements WhereAreYouContext {
 
+    private final SmsManager smsManager = SmsManager.getDefault();
     private final Handler handler = new Handler();
     private ApplicationSettings applicationSettings;
     private LocationActionList model;
@@ -60,31 +63,37 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
         ACRA.init(this);
     }
 
+    @NonNull
     @Override
     public ApplicationSettings getApplicationSettings() {
         return applicationSettings;
     }
 
+    @NonNull
     @Override
     public LocationActionList getModel() {
         return model;
     }
 
+    @NonNull
     @Override
     public LocationActionsSender getActionsSender() {
         return actionsSender;
     }
 
+    @NonNull
     @Override
     public LocationActionManager getModelManager() {
         return modelManager;
     }
 
+    @NonNull
     @Override
     public Handler getDelayedHandler() {
         return handler;
     }
 
+    @NonNull
     @Override
     public ContactsHelper getContactsHelper() {
         if (contactsHelper == null) {
@@ -93,6 +102,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
         return contactsHelper;
     }
 
+    @NonNull
     @Override
     public LocationQueryFlowManager getLocationQueryFlowManager() {
         if (flowManager == null) {
@@ -101,6 +111,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
         return flowManager;
     }
 
+    @NonNull
     @Override
     public String getLocationRequestCommand() {
         return getString(R.string.one_time_location_request);
@@ -108,16 +119,35 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     @Override
     @SuppressLint("MissingPermission")
-    public boolean requestSingleLocationUpdate(String provider, LocationAction action) {
+    public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
             intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            locationManager.requestSingleUpdate(provider, pendingIntent);
+            locationManager.requestSingleUpdate(provider, getPendingIntent(intent));
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void sendSms(@NonNull LocationAction action, @NonNull String content) {
+        smsManager.sendTextMessage(action.getPhoneNumber(),
+                null,
+                content,
+                getDeliveryIntent(action.getActionId(), LocationAction.DeliveryStatus.SENT),
+                getDeliveryIntent(action.getActionId(), LocationAction.DeliveryStatus.DELIVERED));
+    }
+
+    private PendingIntent getDeliveryIntent(long actionId, LocationAction.DeliveryStatus status) {
+        Intent intent = new Intent(LocationBroadcasts.DELIVERY_STATUS_UPDATED);
+        intent.putExtra(LocationBroadcasts.ACTION_ID, actionId);
+        intent.putExtra(LocationBroadcasts.DELIVERY_STATUS, status.name());
+        return getPendingIntent(intent);
+    }
+
+    private PendingIntent getPendingIntent(Intent intent) {
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
