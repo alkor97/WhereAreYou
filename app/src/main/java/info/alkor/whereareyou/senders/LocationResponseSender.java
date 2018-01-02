@@ -1,25 +1,25 @@
 package info.alkor.whereareyou.senders;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
+import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
 import info.alkor.whereareyou.model.LocationAction;
 
 /**
+ * Location response sender.
  * Created by Marlena on 2017-12-27.
  */
-
 public class LocationResponseSender {
 
-    private final Context context;
-    private final SmsSender sender = new SmsSender();
+    private final WhereAreYouContext context;
 
-    public LocationResponseSender(Context context) {
+    public LocationResponseSender(@NonNull WhereAreYouContext context) {
         this.context = context;
     }
 
-    public void sendLocationResponse(LocationAction action) {
+    public void sendLocationResponse(@NonNull LocationAction action) {
         MinimalLocationFormatter responseFormatter = new MinimalLocationFormatter();
-        sender.send(context, action, responseFormatter.format(action.getLocation()));
+        context.sendSms(action, responseFormatter.format(action.getLocation()));
     }
 }
