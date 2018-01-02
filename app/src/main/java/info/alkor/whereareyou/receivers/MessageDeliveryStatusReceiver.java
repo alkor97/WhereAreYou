@@ -1,24 +1,16 @@
 package info.alkor.whereareyou.receivers;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-
+import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.android.receivers.AbstractDeliveryStatusReceiver;
 import info.alkor.whereareyou.model.LocationAction;
-import info.alkor.whereareyou.model.LocationQueryFlowManager;
-import info.alkor.whereareyou.senders.LocationBroadcasts;
 
 /**
+ * SMS message delivery status receiver.
  * Created by Marlena on 2017-12-31.
  */
-
-public class MessageDeliveryStatusReceiver extends BroadcastReceiver {
+public class MessageDeliveryStatusReceiver extends AbstractDeliveryStatusReceiver {
     @Override
-    public void onReceive(Context context, Intent intent) {
-        long actionId = intent.getLongExtra(LocationBroadcasts.ACTION_ID, 0);
-        LocationAction.DeliveryStatus status = LocationAction.DeliveryStatus.valueOf(intent.getStringExtra(LocationBroadcasts.DELIVERY_STATUS));
-
-        LocationQueryFlowManager flowManager = new LocationQueryFlowManager(context);
-        flowManager.updateDeliveryStatus(actionId, status);
+    public void onReceive(WhereAreYouContext context, long actionId, LocationAction.DeliveryStatus deliveryStatus) {
+        context.getLocationQueryFlowManager().updateDeliveryStatus(actionId, deliveryStatus);
     }
 }

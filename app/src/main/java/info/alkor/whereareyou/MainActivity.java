@@ -1,7 +1,6 @@
 package info.alkor.whereareyou;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,7 +19,6 @@ import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
 import info.alkor.whereareyou.model.LocationActionList;
-import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.receivers.LocationActionsReceiver;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.ui.LocationActionAdapter;
@@ -52,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         view.setItemAnimator(new DefaultItemAnimator());
 
-        LocationActionList model = getApplication(this).getModel();
-        LocationActionsSender helper = getApplication(this).getActionsSender();
+        LocationActionList model = getWhereAreYouContext().getModel();
+        LocationActionsSender helper = getWhereAreYouContext().getActionsSender();
 
         adapter = new LocationActionAdapter(this, model);
         view.setAdapter(adapter);
@@ -125,11 +123,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestLocationOf(String phoneNumber, String displayName) {
-        LocationQueryFlowManager flowManager = new LocationQueryFlowManager(this);
-        flowManager.sendLocationRequest(phoneNumber, displayName);
+        getWhereAreYouContext().getLocationQueryFlowManager().sendLocationRequest(phoneNumber, displayName);
     }
 
-    private WhereAreYou getApplication(Context context) {
-        return (WhereAreYou) context.getApplicationContext();
+    private WhereAreYouContext getWhereAreYouContext() {
+        return (WhereAreYouContext) getApplicationContext();
     }
 }

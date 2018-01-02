@@ -1,44 +1,37 @@
 package info.alkor.whereareyou.receivers;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Handler;
 
 import java.util.concurrent.TimeUnit;
 
 import info.alkor.whereareyou.WhereAreYou;
-import info.alkor.whereareyou.senders.LocationBroadcasts;
+import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.android.receivers.AbstractLocationUpdateReceiver;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.settings.LocationSettings;
 
 /**
+ * Location update receiver.
  * Created by Marlena on 2017-12-27.
  */
-
-public class LocationUpdateReceiver extends BroadcastReceiver {
+public class LocationUpdateReceiver extends AbstractLocationUpdateReceiver {
 
     private LocationSettings settings;
     private LocationQueryFlowManager flowManager;
     private Handler async;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        async = getDelayedHandler(context);
-        settings = getLocationSettings(context);
-        flowManager = new LocationQueryFlowManager(context);
+    public void onReceive(WhereAreYouContext context, long actionId, Location location) {
+        async = context.getDelayedHandler();
+        settings = context.getApplicationSettings().getLocationSettings();
+        flowManager = context.getLocationQueryFlowManager();
 
-        Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
-        if (location != null) {
-            long actionId = intent.getLongExtra(LocationBroadcasts.ACTION_ID, 0);
-
-            LocationAction action = flowManager.updateLocation(actionId, location);
-            if (action != null) {
-                scheduleUpdateSending(action);
-            }
+        LocationAction action = flowManager.updateLocation(actionId, location);
+        if (action != null) {
+            scheduleUpdateSending(action);
         }
     }
 
