@@ -1,11 +1,7 @@
 package info.alkor.whereareyou;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
@@ -21,7 +17,7 @@ import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.senders.LocationActionsSender;
-import info.alkor.whereareyou.senders.LocationBroadcasts;
+import info.alkor.whereareyou.senders.LocationUpdateRequester;
 import info.alkor.whereareyou.senders.SmsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 import info.alkor.whereareyou.settings.LocationSettings;
@@ -48,6 +44,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private LocationQueryFlowManager flowManager;
     private LocationParser locationParser;
     private SmsSender smsSender;
+    private LocationUpdateRequester locationUpdateRequester;
 
     @Override
     public void onCreate() {
@@ -121,17 +118,11 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     }
 
     @Override
-    @SuppressLint("MissingPermission")
     public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager != null) {
-            Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
-            intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
-
-            locationManager.requestSingleUpdate(provider, getPendingIntent(intent));
-            return true;
+        if (locationUpdateRequester == null) {
+            locationUpdateRequester = new LocationUpdateRequester(this);
         }
-        return false;
+        return locationUpdateRequester.requestSingleLocationUpdate(provider, action);
     }
 
     @Override
@@ -140,10 +131,6 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
             smsSender = new SmsSender();
         }
         smsSender.send(this, action, content);
-    }
-
-    private PendingIntent getPendingIntent(Intent intent) {
-        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @NonNull
