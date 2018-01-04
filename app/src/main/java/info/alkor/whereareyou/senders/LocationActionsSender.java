@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 /**
+ * Sender of location action model updates.
  * Created by Marlena on 2017-12-20.
  */
-
 public class LocationActionsSender {
 
     private final Context context;
@@ -38,7 +38,14 @@ public class LocationActionsSender {
         getBroadcastManager().sendBroadcastSync(intent);
     }
 
-    public void setPosition(Intent intent, int position) {
+    public void notifyActionRemoved(int position) {
+        final Intent intent = new Intent();
+        intent.setAction(LocationBroadcasts.LOCATION_ACTION_REMOVED);
+        setPosition(intent, position);
+        getBroadcastManager().sendBroadcastSync(intent);
+    }
+
+    private void setPosition(Intent intent, int position) {
         intent.putExtra(LocationBroadcasts.POSITION, position);
     }
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import info.alkor.whereareyou.ui.comparators.LocationActionComparator;
 
@@ -17,7 +16,7 @@ public class LocationActionList {
     private final List<LocationAction> actions = new ArrayList<>();
     private final Comparator<LocationAction> comparator = LocationActionComparator.create();
 
-    public int addAction(LocationAction action) {
+    int addAction(LocationAction action) {
         int position = Collections.binarySearch(actions, action, comparator);
         if (position < 0) {
             actions.add(-position - 1, action);
@@ -27,7 +26,7 @@ public class LocationActionList {
         return position;
     }
 
-    public LocationAction findRelatedNotFulfilledAction(LocationActionSide provider) {
+    LocationAction findRelatedNotFulfilledAction(LocationActionSide provider) {
         for (LocationAction locationAction : actions) {
             if (locationAction.getState() == LocationAction.State.QUERIED && locationAction.getSide().getPhone().equals(provider.getPhone())) {
                 return locationAction;
@@ -50,5 +49,12 @@ public class LocationActionList {
 
     public LocationAction get(int idx) {
         return actions.get(idx);
+    }
+
+    int removeAction(int idx) {
+        if (0 <= idx && idx < actions.size()) {
+            actions.remove(idx);
+        }
+        return idx;
     }
 }

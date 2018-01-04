@@ -3,9 +3,9 @@ package info.alkor.whereareyou.model;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 
 /**
+ * Manages model operations and takes care of updating model views.
  * Created by Marlena on 2017-12-26.
  */
-
 public class LocationActionManager {
 
     private final LocationActionList model;
@@ -16,7 +16,7 @@ public class LocationActionManager {
         this.helper = helper;
     }
 
-    public void addAction(LocationAction action) {
+    void addAction(LocationAction action) {
         final int position = model.addAction(action);
         if (helper != null) {
             if (position < 0) {
@@ -27,15 +27,22 @@ public class LocationActionManager {
         }
     }
 
-    public void changeAction(LocationAction action) {
+    void changeAction(LocationAction action) {
         addAction(action);
     }
 
-    public LocationAction findRelatedNotFulfilledAction(LocationActionSide side) {
+    public void removeAction(int idx) {
+        final int position = model.removeAction(idx);
+        if (position >= 0) {
+            helper.notifyActionRemoved(position);
+        }
+    }
+
+    LocationAction findRelatedNotFulfilledAction(LocationActionSide side) {
         return model.findRelatedNotFulfilledAction(side);
     }
 
-    public LocationAction find(long actionId) {
+    LocationAction find(long actionId) {
         return model.find(actionId);
     }
 }
