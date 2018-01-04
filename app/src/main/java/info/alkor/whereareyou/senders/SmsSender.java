@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.telephony.SmsManager;
 
-import info.alkor.whereareyou.common.Requirements;
 import info.alkor.whereareyou.model.LocationAction;
 
 /**
@@ -16,17 +15,6 @@ import info.alkor.whereareyou.model.LocationAction;
 public class SmsSender {
 
     private final SmsManager manager = SmsManager.getDefault();
-
-    /**
-     * Send SMS with provided content to specified destination.
-     *
-     * @param destination phone number of message destination
-     * @param content     content of message
-     */
-    @Requirements({"UC-SEND-SMS"})
-    public void send(@NonNull String destination, @NonNull String content) {
-        manager.sendTextMessage(destination, null, content, null, null);
-    }
 
     public void send(@NonNull Context context, @NonNull LocationAction action, @NonNull String content) {
         manager.sendTextMessage(action.getPhoneNumber(),

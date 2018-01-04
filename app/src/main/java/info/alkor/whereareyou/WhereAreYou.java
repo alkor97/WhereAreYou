@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.telephony.SmsManager;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraDialog;
@@ -23,6 +22,7 @@ import info.alkor.whereareyou.model.LocationActionManager;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.senders.LocationBroadcasts;
+import info.alkor.whereareyou.senders.SmsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 import info.alkor.whereareyou.settings.LocationSettings;
 import info.alkor.whereareyou.settings.UserManager;
@@ -39,7 +39,6 @@ import info.alkor.whereareyou.settings.UserManager;
 )
 public class WhereAreYou extends Application implements WhereAreYouContext {
 
-    private final SmsManager smsManager = SmsManager.getDefault();
     private final Handler handler = new Handler();
     private ApplicationSettings applicationSettings;
     private LocationActionList model;
@@ -48,6 +47,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private ContactsHelper contactsHelper;
     private LocationQueryFlowManager flowManager;
     private LocationParser locationParser;
+    private SmsSender smsSender;
 
     @Override
     public void onCreate() {
@@ -136,18 +136,10 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     @Override
     public void sendSms(@NonNull LocationAction action, @NonNull String content) {
-        smsManager.sendTextMessage(action.getPhoneNumber(),
-                null,
-                content,
-                getDeliveryIntent(action.getActionId(), LocationAction.DeliveryStatus.SENT),
-                getDeliveryIntent(action.getActionId(), LocationAction.DeliveryStatus.DELIVERED));
-    }
-
-    private PendingIntent getDeliveryIntent(long actionId, LocationAction.DeliveryStatus status) {
-        Intent intent = new Intent(LocationBroadcasts.DELIVERY_STATUS_UPDATED);
-        intent.putExtra(LocationBroadcasts.ACTION_ID, actionId);
-        intent.putExtra(LocationBroadcasts.DELIVERY_STATUS, status.name());
-        return getPendingIntent(intent);
+        if (smsSender == null) {
+            smsSender = new SmsSender();
+        }
+        smsSender.send(this, action, content);
     }
 
     private PendingIntent getPendingIntent(Intent intent) {
