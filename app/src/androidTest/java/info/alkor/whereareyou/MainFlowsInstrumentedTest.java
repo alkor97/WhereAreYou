@@ -32,6 +32,7 @@ public class MainFlowsInstrumentedTest {
     @Before
     public void beforeTest() {
         context = (WhereAreYouContext) InstrumentationRegistry.getTargetContext().getApplicationContext();
+        context.getApplicationSettings().getLocationSettings().setMaxAwaitTimeForBetterLocationAccuracy(1, TimeUnit.SECONDS);
     }
 
     @After

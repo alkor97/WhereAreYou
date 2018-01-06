@@ -13,13 +13,20 @@ import java.util.concurrent.TimeUnit;
  * Created by Marlena on 2017-02-19.
  */
 public class LocationSettings {
-	@NonNull
-	public Set<String> getLocationProviders() {
-		return new HashSet<>(Arrays.asList(LocationManager.GPS_PROVIDER, LocationManager
-				.NETWORK_PROVIDER, LocationManager.PASSIVE_PROVIDER));
-	}
 
-	public long getMaxAwaitTimeForBetterLocationAccuracy(@NonNull TimeUnit timeUnit) {
-		return timeUnit.convert(5, TimeUnit.SECONDS);
-	}
+    private long maxAwaitTimeForBetterLocationAccuracy = 15_000;
+
+    @NonNull
+    public Set<String> getLocationProviders() {
+        return new HashSet<>(Arrays.asList(LocationManager.GPS_PROVIDER, LocationManager
+                .NETWORK_PROVIDER, LocationManager.PASSIVE_PROVIDER));
+    }
+
+    public void setMaxAwaitTimeForBetterLocationAccuracy(long value, @NonNull TimeUnit timeUnit) {
+        this.maxAwaitTimeForBetterLocationAccuracy = TimeUnit.MILLISECONDS.convert(value, timeUnit);
+    }
+
+    public long getMaxAwaitTimeForBetterLocationAccuracy(@NonNull TimeUnit timeUnit) {
+        return timeUnit.convert(maxAwaitTimeForBetterLocationAccuracy, TimeUnit.MILLISECONDS);
+    }
 }
