@@ -10,6 +10,7 @@
     <application
         android:name=".WhereAreYou"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/ic_whereareyou_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -39,12 +40,16 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.LocationUpdateReceiver">
+        <receiver
+            android:name=".receivers.LocationUpdateReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="LOCATION_UPDATED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.MessageDeliveryStatusReceiver">
+        <receiver
+            android:name=".receivers.MessageDeliveryStatusReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="DELIVERY_STATUS_UPDATED"/>
             </intent-filter>
