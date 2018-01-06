@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [    <!ENTITY appName "Gdzie jesteś?">]>
 <resources>
-	<string name="app_name">Gdzie jesteś?</string>
+    <string name="app_name">&appName;</string>
 	<string name="one_time_location_request">Hej, gdzie jesteś?</string>
 	<string name="locate_phone">Zlokalizuj osobę&#8230;</string>
 	<string name="confirm_locate_phone">Zlokalizować telefon %2$s (%1$s)?</string>
-	<string name="app_crash_report_query">Aplikacja \'Gdzie jesteś?\' niespodziewanie zatrzymała się. Czy chcesz wysłać raport to autora?</string>
+    <string name="app_crash_report_query">Aplikacja \'&appName;\' niespodziewanie zatrzymała się. Czy chcesz wysłać raport to autora?</string>
 	<string name="app_yes">Tak</string>
 	<string name="app_no">Nie</string>
 </resources>

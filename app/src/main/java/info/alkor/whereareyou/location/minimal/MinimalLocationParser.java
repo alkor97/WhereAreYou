@@ -17,7 +17,7 @@ public class MinimalLocationParser implements LocationParser {
     private final LocationHelpers h = new LocationHelpers();
     private final LocationFactory factory;
 
-    public MinimalLocationParser() {
+    protected MinimalLocationParser() {
         this(new LocationFactory() {
             @Override
             public Location create(String provider) {
@@ -26,7 +26,7 @@ public class MinimalLocationParser implements LocationParser {
         });
     }
 
-    MinimalLocationParser(@NonNull LocationFactory factory) {
+    protected MinimalLocationParser(@NonNull LocationFactory factory) {
         this.factory = factory;
     }
 
@@ -117,7 +117,7 @@ public class MinimalLocationParser implements LocationParser {
         }
     }
 
-    interface LocationFactory {
+    protected interface LocationFactory {
         Location create(String provider);
     }
 

@@ -3,14 +3,10 @@ package info.alkor.whereareyou.model;
 import java.io.Serializable;
 
 /**
+ * Location action side.
  * Created by Marlena on 2017-11-06.
  */
-
 public class LocationActionSide implements Serializable {
-
-    public enum Type {
-        REQUESTER, PROVIDER
-    }
 
     private final String name;
     private final String phone;
@@ -20,6 +16,14 @@ public class LocationActionSide implements Serializable {
         this.name = name;
         this.phone = phone;
         this.type = type;
+    }
+
+    public static LocationActionSide requester(String phone, String name) {
+        return new LocationActionSide(phone, name, Type.REQUESTER);
+    }
+
+    public static LocationActionSide provider(String phone, String name) {
+        return new LocationActionSide(phone, name, Type.PROVIDER);
     }
 
     public String getName() {
@@ -41,9 +45,7 @@ public class LocationActionSide implements Serializable {
 
         LocationActionSide that = (LocationActionSide) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        return type == that.type;
+        return (name != null ? name.equals(that.name) : that.name == null) && (phone != null ? phone.equals(that.phone) : that.phone == null) && type == that.type;
     }
 
     @Override
@@ -54,11 +56,7 @@ public class LocationActionSide implements Serializable {
         return result;
     }
 
-    public static LocationActionSide requester(String phone, String name) {
-        return new LocationActionSide(phone, name, Type.REQUESTER);
-    }
-
-    public static LocationActionSide provider(String phone, String name) {
-        return new LocationActionSide(phone, name, Type.PROVIDER);
+    public enum Type {
+        REQUESTER, PROVIDER
     }
 }

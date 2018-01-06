@@ -3,7 +3,7 @@ package info.alkor.whereareyou.senders;
 import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.WhereAreYouContext;
-import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
+import info.alkor.whereareyou.location.link.LocationLinkFormatter;
 import info.alkor.whereareyou.model.LocationAction;
 
 /**
@@ -19,7 +19,7 @@ public class LocationResponseSender {
     }
 
     public void sendLocationResponse(@NonNull LocationAction action) {
-        MinimalLocationFormatter responseFormatter = new MinimalLocationFormatter();
+        LocationLinkFormatter responseFormatter = new LocationLinkFormatter(context.getSmsLinkPrefix());
         context.sendSms(action, responseFormatter.format(action.getLocation()));
     }
 }

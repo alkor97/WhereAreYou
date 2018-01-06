@@ -28,7 +28,8 @@ public class LocationActionList {
 
     LocationAction findRelatedNotFulfilledAction(LocationActionSide provider) {
         for (LocationAction locationAction : actions) {
-            if (locationAction.getState() == LocationAction.State.QUERIED && locationAction.getSide().getPhone().equals(provider.getPhone())) {
+            if (locationAction.getState() == LocationAction.State.QUERIED
+                    && locationAction.getSide().equals(provider)) {
                 return locationAction;
             }
         }

@@ -79,6 +79,7 @@ public class MainFlowsInstrumentedTest {
     public void handleLocationRequesting() throws Exception {
         final String phone = "+48987654321";
         final String name = "Test2";
+        final String pathPrefix = context.getSmsLinkPrefix();
 
         context.getLocationQueryFlowManager().sendLocationRequest(phone, name);
         assertEquals(1, context.getModel().size());
@@ -92,7 +93,7 @@ public class MainFlowsInstrumentedTest {
         Thread.sleep(1000);
         assertEquals(LocationAction.DeliveryStatus.DELIVERED, action.getDeliveryStatus());
 
-        smsReceiver.onReceive(context, phone, name, "20180104064313,gps,53.438412,14.574477,157,65,3,1");
+        smsReceiver.onReceive(context, phone, name, pathPrefix + "20180104064313,gps,53.438412,14.574477,157,65,3,1");
         assertEquals(1, context.getModel().size());
         action = context.getModel().get(0);
         assertNotNull(action);

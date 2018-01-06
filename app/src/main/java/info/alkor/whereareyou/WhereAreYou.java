@@ -11,7 +11,7 @@ import org.acra.annotation.AcraMailSender;
 
 import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.location.LocationParser;
-import info.alkor.whereareyou.location.minimal.MinimalLocationParser;
+import info.alkor.whereareyou.location.link.LocationLinkParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
@@ -137,8 +137,13 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     @Override
     public LocationParser getLocationParser() {
         if (locationParser == null) {
-            locationParser = new MinimalLocationParser();
+            locationParser = new LocationLinkParser(getSmsLinkPrefix());
         }
         return locationParser;
+    }
+
+    @NonNull
+    public String getSmsLinkPrefix() {
+        return getString(R.string.smsLinkPrefix);
     }
 }

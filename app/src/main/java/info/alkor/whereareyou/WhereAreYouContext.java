@@ -48,4 +48,7 @@ public interface WhereAreYouContext {
 
     @NonNull
     LocationParser getLocationParser();
+
+    @NonNull
+    String getSmsLinkPrefix();
 }
