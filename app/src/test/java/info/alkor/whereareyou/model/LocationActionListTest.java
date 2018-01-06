@@ -6,11 +6,11 @@ import java.util.Comparator;
 
 import info.alkor.whereareyou.ui.comparators.LocationActionComparator;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
+ * Location action list tests.
  * Created by Marlena on 2017-12-27.
  */
 public class LocationActionListTest {
@@ -26,8 +26,12 @@ public class LocationActionListTest {
         return LocationActionSide.requester(phone, "u" + phone);
     }
 
-    private LocationAction action(LocationActionSide side) {
-        return new LocationAction(side);
+    private LocationAction action(LocationActionSide side) throws Exception {
+        try {
+            return new LocationAction(side);
+        } finally {
+            Thread.sleep(1);
+        }
     }
 
     private void assertContent(LocationAction... expected) {
@@ -38,7 +42,7 @@ public class LocationActionListTest {
     }
 
     @Test
-    public void testAdding() {
+    public void testAdding() throws Exception {
         LocationAction request = action(provider("123"));
         LocationAction response = action(requester("123"));
 
@@ -52,8 +56,8 @@ public class LocationActionListTest {
     }
 
     @Test
-    public void findRelatedNonFulfilledAction() {
-        LocationActionSide provider = provider("123");
+    public void findRelatedNonFulfilledAction() throws Exception {
+        LocationActionSide provider = provider("234");
 
         // uninitialized will be ignored
         LocationAction uninitialized = action(provider);
@@ -73,7 +77,7 @@ public class LocationActionListTest {
     }
 
     @Test
-    public void noRelatedNotFulfilledActionFound() {
+    public void noRelatedNotFulfilledActionFound() throws Exception {
         LocationAction query = action(provider("123"));
         query.setState(LocationAction.State.QUERIED);
         model.addAction(query);
