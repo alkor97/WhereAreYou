@@ -92,7 +92,9 @@ public class LocationQueryFlowManager {
     public @Nullable
     LocationAction updateLocation(long actionId, @NonNull Location location) {
         final LocationAction action = modelManager.find(actionId);
-        if (action != null && (action.getLocation() == null
+        if (action != null
+                && action.getState() != LocationAction.State.ANSWERED
+                && (action.getLocation() == null
                 || location.getAccuracy() < action.getLocation().getAccuracy()
                 || newerByAtLeastOneMinute(action.getLocation(), location))) {
             action.setLocation(location);

@@ -41,21 +41,7 @@ public class MainFlowsInstrumentedTest {
         }
     }
 
-    @Test
-    public void handleLocationProviding() throws Exception {
-        final String phone = "+48123456789";
-        final String name = "Test1";
-        smsReceiver.onReceive(context, phone, name, context.getLocationRequestCommand());
-
-        assertEquals(1, context.getModel().size());
-        LocationAction action = context.getModel().get(0);
-        assertNotNull(action);
-        assertEquals(LocationAction.State.QUERIED, action.getState());
-        assertEquals(phone, action.getPhoneNumber());
-        assertEquals(name, action.getDisplayName());
-        assertEquals(LocationAction.DeliveryStatus.PENDING, action.getDeliveryStatus());
-
-        final Location location = new Location("gps");
+    private void updateLocation(LocationAction action, Location location) throws Exception {
         locationUpdateReceiver.onReceive(context, action.getActionId(), location);
 
         assertEquals(1, context.getModel().size());
@@ -73,6 +59,35 @@ public class MainFlowsInstrumentedTest {
 
         assertEquals(LocationAction.State.ANSWERED, action.getState());
         assertEquals(LocationAction.DeliveryStatus.DELIVERED, action.getDeliveryStatus());
+    }
+
+    private Location location(String provider, double latitude, double longitude, double altitude, float accuracy, float bearing, float speed) {
+        Location location = new Location(provider);
+        location.setTime(System.currentTimeMillis());
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        location.setAltitude(altitude);
+        location.setAccuracy(accuracy);
+        location.setBearing(bearing);
+        location.setSpeed(speed);
+        return location;
+    }
+
+    @Test
+    public void handleLocationProviding() throws Exception {
+        final String phone = "+48123456789";
+        final String name = "Test1";
+        smsReceiver.onReceive(context, phone, name, context.getLocationRequestCommand());
+
+        assertEquals(1, context.getModel().size());
+        LocationAction action = context.getModel().get(0);
+        assertNotNull(action);
+        assertEquals(LocationAction.State.QUERIED, action.getState());
+        assertEquals(phone, action.getPhoneNumber());
+        assertEquals(name, action.getDisplayName());
+        assertEquals(LocationAction.DeliveryStatus.PENDING, action.getDeliveryStatus());
+
+        updateLocation(action, location("network", 53, 14, 0, 1000, 0, 0));
     }
 
     @Test
