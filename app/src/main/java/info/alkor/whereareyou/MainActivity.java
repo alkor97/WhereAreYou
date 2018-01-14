@@ -18,7 +18,7 @@ import android.view.View;
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
-import info.alkor.whereareyou.model.LocationActionList;
+import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.receivers.LocationActionsReceiver;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.ui.LocationActionAdapter;
@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         };
         permissionRequester.requestAllPermissions(callback);
 
-        view = (RecyclerView) findViewById(R.id.locationActions);
+        view = findViewById(R.id.locationActions);
         view.setHasFixedSize(true);
         view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         view.setItemAnimator(new DefaultItemAnimator());
 
-        LocationActionList model = getWhereAreYouContext().getModel();
+        LocationActions model = getWhereAreYouContext().getModel();
         LocationActionsSender helper = getWhereAreYouContext().getActionsSender();
 
         adapter = new LocationActionAdapter(this, model);

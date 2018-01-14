@@ -1,5 +1,7 @@
 package info.alkor.whereareyou.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,12 +13,13 @@ import info.alkor.whereareyou.ui.comparators.LocationActionComparator;
  * Location requests container.
  * Created by Marlena on 2017-07-14.
  */
-public class LocationActionList {
+public class LocationActionList implements LocationActions {
 
     private final List<LocationAction> actions = new ArrayList<>();
     private final Comparator<LocationAction> comparator = LocationActionComparator.create();
 
-    int addAction(LocationAction action) {
+    @Override
+    public int addAction(@NonNull LocationAction action) {
         int position = Collections.binarySearch(actions, action, comparator);
         if (position < 0) {
             actions.add(-position - 1, action);
@@ -26,7 +29,8 @@ public class LocationActionList {
         return position;
     }
 
-    LocationAction findRelatedNotFulfilledAction(LocationActionSide provider) {
+    @Override
+    public LocationAction findRelatedNotFulfilledAction(@NonNull LocationActionSide provider) {
         for (LocationAction locationAction : actions) {
             if (locationAction.getState() == LocationAction.State.QUERIED
                     && locationAction.getSide().equals(provider)) {
@@ -36,6 +40,7 @@ public class LocationActionList {
         return null;
     }
 
+    @Override
     public LocationAction find(long actionId) {
         int position = Collections.binarySearch(actions, new LocationAction(actionId), comparator);
         if (position >= 0) {
@@ -44,15 +49,18 @@ public class LocationActionList {
         return null;
     }
 
+    @Override
     public int size() {
         return actions.size();
     }
 
+    @Override
     public LocationAction get(int idx) {
         return actions.get(idx);
     }
 
-    int removeAction(int idx) {
+    @Override
+    public int removeAction(int idx) {
         if (0 <= idx && idx < actions.size()) {
             actions.remove(idx);
         }

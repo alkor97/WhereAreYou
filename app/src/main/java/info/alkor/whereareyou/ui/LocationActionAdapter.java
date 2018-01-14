@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.model.LocationAction;
-import info.alkor.whereareyou.model.LocationActionList;
+import info.alkor.whereareyou.model.LocationActions;
 
 /**
  * Adapter for RecyclerView of location tasks.
@@ -21,9 +21,9 @@ public class LocationActionAdapter extends RecyclerView.Adapter<LocationActionVi
     private final Context context;
 
     @NonNull
-    private final LocationActionList locationActions;
+    private final LocationActions locationActions;
 
-    public LocationActionAdapter(@NonNull Context context, @NonNull LocationActionList locationActions) {
+    public LocationActionAdapter(@NonNull Context context, @NonNull LocationActions locationActions) {
         this.context = context;
         this.locationActions = locationActions;
     }

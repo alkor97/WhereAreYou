@@ -15,6 +15,7 @@ import info.alkor.whereareyou.location.link.LocationLinkParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
+import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.senders.LocationUpdateRequester;
@@ -37,7 +38,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     private final Handler handler = new Handler();
     private ApplicationSettings applicationSettings;
-    private LocationActionList model;
+    private LocationActions model;
     private LocationActionsSender actionsSender;
     private LocationActionManager modelManager;
     private ContactsHelper contactsHelper;
@@ -71,7 +72,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     @NonNull
     @Override
-    public LocationActionList getModel() {
+    public LocationActions getModel() {
         return model;
     }
 

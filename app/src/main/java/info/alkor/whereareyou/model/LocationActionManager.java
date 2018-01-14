@@ -8,10 +8,10 @@ import info.alkor.whereareyou.senders.LocationActionsSender;
  */
 public class LocationActionManager {
 
-    private final LocationActionList model;
+    private final LocationActions model;
     private final LocationActionsSender helper;
 
-    public LocationActionManager(LocationActionList model, LocationActionsSender helper) {
+    public LocationActionManager(LocationActions model, LocationActionsSender helper) {
         this.model = model;
         this.helper = helper;
     }

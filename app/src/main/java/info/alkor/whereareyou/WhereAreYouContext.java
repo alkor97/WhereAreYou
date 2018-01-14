@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.model.LocationAction;
-import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
+import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
@@ -22,7 +22,7 @@ public interface WhereAreYouContext {
     ApplicationSettings getApplicationSettings();
 
     @NonNull
-    LocationActionList getModel();
+    LocationActions getModel();
 
     @NonNull
     LocationActionsSender getActionsSender();
