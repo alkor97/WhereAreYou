@@ -1,6 +1,5 @@
 package info.alkor.whereareyou.ui;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,13 +17,9 @@ import info.alkor.whereareyou.model.LocationActions;
 public class LocationActionAdapter extends RecyclerView.Adapter<LocationActionViewHolder> {
 
     @NonNull
-    private final Context context;
-
-    @NonNull
     private final LocationActions locationActions;
 
-    public LocationActionAdapter(@NonNull Context context, @NonNull LocationActions locationActions) {
-        this.context = context;
+    public LocationActionAdapter(@NonNull LocationActions locationActions) {
         this.locationActions = locationActions;
     }
 
