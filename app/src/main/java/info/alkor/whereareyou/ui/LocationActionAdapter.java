@@ -25,7 +25,7 @@ public class LocationActionAdapter extends RecyclerView.Adapter<LocationActionVi
 
     @Override
     public LocationActionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main,
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_action,
                 parent, false);
 
         return new LocationActionViewHolder(itemView);
