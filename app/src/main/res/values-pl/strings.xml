@@ -7,4 +7,6 @@
     <string name="app_crash_report_query">Aplikacja \'&appName;\' niespodziewanie zatrzymała się. Czy chcesz wysłać raport to autora?</string>
 	<string name="app_yes">Tak</string>
 	<string name="app_no">Nie</string>
+	<string name="actions_title">Akcje</string>
+	<string name="users_title">Użytkownicy</string>
 </resources>

@@ -19,4 +19,6 @@
     <string name="host" translatable="false">&host;</string>
     <string name="pathPrefix" translatable="false">/&pathPrefix;</string>
     <string name="smsLinkPrefix" translatable="false">&scheme;://&host;/&pathPrefix;/?q=</string>
+    <string name="actions_title">Actions</string>
+    <string name="users_title">Users</string>
 </resources>

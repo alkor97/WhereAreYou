@@ -8,35 +8,45 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
-import info.alkor.whereareyou.model.LocationActions;
-import info.alkor.whereareyou.receivers.LocationActionsReceiver;
-import info.alkor.whereareyou.senders.LocationActionsSender;
-import info.alkor.whereareyou.ui.LocationActionAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PICK_CONTACT_TO_LOCATE = 1;
+    public static final int PICK_CONTACT_TO_LOCATE = 1;
     private final PermissionRequester permissionRequester = new PermissionRequester(this);
-
-    private RecyclerView view;
-    private LocationActionAdapter adapter;
-
-    private LocationActionsReceiver actionsHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        SectionsPagerAdapter viewPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(viewPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
         PermissionRequester.ResultCallback callback = new PermissionRequester.ResultCallback() {
             @Override
@@ -44,38 +54,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         permissionRequester.requestAllPermissions(callback);
-
-        view = findViewById(R.id.locationActions);
-        view.setHasFixedSize(true);
-        view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        view.setItemAnimator(new DefaultItemAnimator());
-
-        LocationActions model = getWhereAreYouContext().getModel();
-        LocationActionsSender helper = getWhereAreYouContext().getActionsSender();
-
-        adapter = new LocationActionAdapter(this, model);
-        view.setAdapter(adapter);
-
-        actionsHandler = new LocationActionsReceiver(helper, adapter);
-        actionsHandler.registerHandler(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        actionsHandler.unregisterHandler(this);
-        super.onDestroy();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         permissionRequester.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    public void locatePhone(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone
-                .CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT_TO_LOCATE);
     }
 
     @Override
@@ -89,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handlePhoneSelectionForLocation(Intent data) {
         final Uri uri = data.getData();
+        if (uri == null) return;
         Cursor cursor = null;
         try {
             cursor = getContentResolver().query(uri, null, null, null, null);
@@ -128,5 +113,36 @@ public class MainActivity extends AppCompatActivity {
 
     private WhereAreYouContext getWhereAreYouContext() {
         return (WhereAreYouContext) getApplicationContext();
+    }
+
+    public void locatePhone(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone
+                .CONTENT_URI);
+        startActivityForResult(intent, MainActivity.PICK_CONTACT_TO_LOCATE);
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.locatePhone);
+            fab.show();
+            switch (position) {
+                case 0:
+                    return new ActionsFragment();
+                case 1:
+                    return new UsersFragment();
+            }
+            throw new IllegalArgumentException("Index out of bounds");
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 }
