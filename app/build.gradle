@@ -1,15 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "info.alkor.whereareyou"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled = true
     }
     buildTypes {
         release {
@@ -20,20 +23,22 @@ android {
 }
 
 def acraVersion = '5.0.0'
-def supportVersion = '25.4.0'
+def supportVersion = '27.0.2'
 
 dependencies {
-    implementation 'com.android.support:support-v4:25.4.0'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile "com.android.support:design:$supportVersion"
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.2.22'
-    compile "com.android.support:cardview-v7:$supportVersion"
-    compile "ch.acra:acra-mail:$acraVersion"
+
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
+
+    implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-dialog:$acraVersion"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.2.22'
 }

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Comparator;
 
-import info.alkor.whereareyou.ui.comparators.LocationActionComparator;
+import info.alkor.whereareyou.comparators.LocationActionComparator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

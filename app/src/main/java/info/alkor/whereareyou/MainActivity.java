@@ -1,6 +1,7 @@
 package info.alkor.whereareyou;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,31 +20,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
+import info.alkor.whereareyou.model.LocationActionSide;
+import info.alkor.whereareyou.ui.LocationSideViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_CONTACT_TO_LOCATE = 1;
     private final PermissionRequester permissionRequester = new PermissionRequester(this);
+    private LocationSideViewModel sidesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         SectionsPagerAdapter viewPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(viewPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
@@ -54,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         permissionRequester.requestAllPermissions(callback);
+
+        sidesViewModel = ViewModelProviders.of(this).get(LocationSideViewModel.class);
     }
 
     @Override
@@ -108,7 +116,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestLocationOf(String phoneNumber, String displayName) {
-        getWhereAreYouContext().getLocationQueryFlowManager().sendLocationRequest(phoneNumber, displayName);
+        getWhereAreYouContext()
+                .getLocationQueryFlowManager()
+                .sendLocationRequest(phoneNumber, displayName);
+        sidesViewModel
+                .getModel()
+                .postValue(getLocationActionSide(phoneNumber, displayName));
+    }
+
+    private List<LocationActionSide> getLocationActionSide(String phoneNumber, String displayName) {
+        List<LocationActionSide> list = new ArrayList<>();
+        list.add(LocationActionSide.provider(phoneNumber, displayName));
+        return list;
     }
 
     private WhereAreYouContext getWhereAreYouContext() {
@@ -129,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.locatePhone);
+            FloatingActionButton fab = findViewById(R.id.locatePhone);
             fab.show();
             switch (position) {
                 case 0:

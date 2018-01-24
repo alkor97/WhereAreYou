@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import info.alkor.whereareyou.ui.comparators.LocationActionComparator;
+import info.alkor.whereareyou.comparators.LocationActionComparator;
 
 /**
  * Location requests container.

@@ -1,13 +1,13 @@
-package info.alkor.whereareyou.ui.comparators;
+package info.alkor.whereareyou.comparators;
 
 import java.util.Comparator;
 
 import info.alkor.whereareyou.model.LocationActionSide;
 
 /**
+ * Location action side comparator.
  * Created by Marlena on 2017-11-06.
  */
-
 public class LocationActionSideComparator implements Comparator<LocationActionSide> {
 
     private final Comparator<LocationActionSide.Type> typeComparator = NullAwareComparator.create(LocationActionSide.Type.class);

@@ -1,4 +1,4 @@
-package info.alkor.whereareyou.ui.comparators;
+package info.alkor.whereareyou.comparators;
 
 import org.junit.Test;
 

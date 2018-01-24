@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="side"
+            type="info.alkor.whereareyou.model.LocationActionSide" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        card_view:cardBackgroundColor="#FEFEFE"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp">
+
+        <TextView
+            android:id="@+id/textViewPhoneOrName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text='@{side.name != null ? (side.name + " (" + side.phone + ")") : side.phone}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+    </android.support.v7.widget.CardView>
+</layout>

@@ -1,4 +1,4 @@
-package info.alkor.whereareyou.ui.comparators;
+package info.alkor.whereareyou.comparators;
 
 import org.junit.Test;
 
@@ -6,9 +6,11 @@ import java.util.Comparator;
 
 import info.alkor.whereareyou.model.LocationActionSide;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
+ * Location action side comparator test.
  * Created by Marlena on 2017-12-27.
  */
 public class LocationActionSideComparatorTest {

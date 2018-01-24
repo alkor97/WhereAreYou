@@ -1,11 +1,11 @@
-package info.alkor.whereareyou.ui.comparators;
+package info.alkor.whereareyou.comparators;
 
 import java.util.Comparator;
 
 import info.alkor.whereareyou.model.LocationAction;
 
 /**
- * Liocation action comparator.
+ * Location action comparator.
  * Created by Marlena on 2017-11-06.
  */
 public class LocationActionComparator implements Comparator<LocationAction> {

@@ -1,6 +1,7 @@
 package info.alkor.whereareyou;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,24 +27,27 @@ public class ActionsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_actions, container, false);
 
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.locationActions);
+        RecyclerView rv = view.findViewById(R.id.locationActions);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        LocationActions model = getWhereAreYouContext().getModel();
-        LocationActionsSender helper = getWhereAreYouContext().getActionsSender();
+        WhereAreYouContext context = getWhereAreYouContext();
+        if (context != null) {
+            LocationActions model = context.getModel();
+            LocationActionsSender helper = context.getActionsSender();
 
-        LocationActionAdapter adapter = new LocationActionAdapter(model);
-        rv.setAdapter(adapter);
+            LocationActionAdapter adapter = new LocationActionAdapter(model);
+            rv.setAdapter(adapter);
 
-        actionsHandler = new LocationActionsReceiver(helper, adapter);
-        actionsHandler.registerHandler(getContext());
+            actionsHandler = new LocationActionsReceiver(helper, adapter);
+            actionsHandler.registerHandler(getContext());
+        }
 
         return view;
     }
@@ -55,6 +59,6 @@ public class ActionsFragment extends Fragment {
     }
 
     private WhereAreYouContext getWhereAreYouContext() {
-        return (WhereAreYouContext) getActivity().getApplicationContext();
+        return getActivity() != null ? (WhereAreYouContext) getActivity().getApplicationContext() : null;
     }
 }
