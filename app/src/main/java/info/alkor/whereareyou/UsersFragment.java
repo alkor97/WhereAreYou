@@ -49,21 +49,7 @@ public class UsersFragment extends Fragment {
 
         LocationSideViewModel viewModel = getViewModel();
         if (viewModel != null) {
-            viewModel.getModel().observe(this, new Observer<List<LocationActionSide>>() {
-                @Override
-                public void onChanged(@Nullable List<LocationActionSide> locationActionSides) {
-                    DiffUtil.DiffResult result = DiffUtil.calculateDiff(
-                            new LocationSideDiffCallback(
-                                    adapter.getSides(),
-                                    locationActionSides != null
-                                            ? locationActionSides
-                                            : Collections.<LocationActionSide>emptyList()));
-
-                    adapter.getSides().clear();
-                    adapter.setSides(locationActionSides);
-                    result.dispatchUpdatesTo(adapter);
-                }
-            });
+            viewModel.getModel().observe(this, new SidesObserver());
         }
 
         return view;
@@ -75,6 +61,22 @@ public class UsersFragment extends Fragment {
             return ViewModelProviders.of(getActivity()).get(LocationSideViewModel.class);
         }
         return null;
+    }
+
+    private class SidesObserver implements Observer<List<LocationActionSide>> {
+        @Override
+        public void onChanged(@Nullable List<LocationActionSide> locationActionSides) {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(
+                    new LocationSideDiffCallback(
+                            adapter.getSides(),
+                            locationActionSides != null
+                                    ? locationActionSides
+                                    : Collections.<LocationActionSide>emptyList()));
+
+            adapter.getSides().clear();
+            adapter.setSides(locationActionSides);
+            result.dispatchUpdatesTo(adapter);
+        }
     }
 
     private class LocationSideDiffCallback extends DiffUtil.Callback {

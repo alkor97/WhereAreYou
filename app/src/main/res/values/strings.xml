@@ -21,4 +21,5 @@
     <string name="smsLinkPrefix" translatable="false">&scheme;://&host;/&pathPrefix;/?q=</string>
     <string name="actions_title">Actions</string>
     <string name="users_title">Users</string>
+    <string name="confirm_delete_phone">Delete %1$s\'s phone %2$s?</string>
 </resources>

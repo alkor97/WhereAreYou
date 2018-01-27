@@ -1,6 +1,7 @@
 package info.alkor.whereareyou;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,6 +18,8 @@ import info.alkor.whereareyou.model.LocationActionList;
 import info.alkor.whereareyou.model.LocationActionManager;
 import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.persistence.AppDatabase;
+import info.alkor.whereareyou.persistence.UserDataAccess;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.senders.LocationUpdateRequester;
 import info.alkor.whereareyou.senders.SmsSender;
@@ -46,6 +49,8 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private LocationParser locationParser;
     private SmsSender smsSender;
     private LocationUpdateRequester locationUpdateRequester;
+    private AppDatabase database;
+    private UserDataAccess userDataAccess;
 
     @Override
     public void onCreate() {
@@ -146,5 +151,24 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     @NonNull
     public String getSmsLinkPrefix() {
         return getString(R.string.smsLinkPrefix);
+    }
+
+    @NonNull
+    @Override
+    public AppDatabase getDatabase() {
+        if (database == null) {
+            database = Room.databaseBuilder(this, AppDatabase.class, "app_database")
+                    .build();
+        }
+        return database;
+    }
+
+    @NonNull
+    @Override
+    public UserDataAccess getUserDataAccess() {
+        if (userDataAccess == null) {
+            userDataAccess = new UserDataAccess(this);
+        }
+        return userDataAccess;
     }
 }

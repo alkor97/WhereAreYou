@@ -1,7 +1,6 @@
 package info.alkor.whereareyou;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,19 +19,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
 import info.alkor.whereareyou.model.LocationActionSide;
-import info.alkor.whereareyou.ui.LocationSideViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_CONTACT_TO_LOCATE = 1;
     private final PermissionRequester permissionRequester = new PermissionRequester(this);
-    private LocationSideViewModel sidesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         permissionRequester.requestAllPermissions(callback);
-
-        sidesViewModel = ViewModelProviders.of(this).get(LocationSideViewModel.class);
     }
 
     @Override
@@ -119,15 +112,7 @@ public class MainActivity extends AppCompatActivity {
         getWhereAreYouContext()
                 .getLocationQueryFlowManager()
                 .sendLocationRequest(phoneNumber, displayName);
-        sidesViewModel
-                .getModel()
-                .postValue(getLocationActionSide(phoneNumber, displayName));
-    }
-
-    private List<LocationActionSide> getLocationActionSide(String phoneNumber, String displayName) {
-        List<LocationActionSide> list = new ArrayList<>();
-        list.add(LocationActionSide.provider(phoneNumber, displayName));
-        return list;
+        getWhereAreYouContext().getUserDataAccess().addUser(LocationActionSide.provider(phoneNumber, displayName));
     }
 
     private WhereAreYouContext getWhereAreYouContext() {

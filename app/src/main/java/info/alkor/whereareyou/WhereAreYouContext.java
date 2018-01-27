@@ -9,6 +9,8 @@ import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationActionManager;
 import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.persistence.AppDatabase;
+import info.alkor.whereareyou.persistence.UserDataAccess;
 import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 
@@ -51,4 +53,10 @@ public interface WhereAreYouContext {
 
     @NonNull
     String getSmsLinkPrefix();
+
+    @NonNull
+    UserDataAccess getUserDataAccess();
+
+    @NonNull
+    AppDatabase getDatabase();
 }
