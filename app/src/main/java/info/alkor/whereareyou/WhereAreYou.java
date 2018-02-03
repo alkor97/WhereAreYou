@@ -141,6 +141,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     public AppDatabase getDatabase() {
         if (database == null) {
             database = Room.databaseBuilder(this, AppDatabase.class, "app_database")
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return database;
