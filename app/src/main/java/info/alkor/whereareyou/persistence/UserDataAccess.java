@@ -10,6 +10,7 @@ import java.util.List;
 
 import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.model.LocationActionSide;
 
 /**
@@ -18,6 +19,7 @@ import info.alkor.whereareyou.model.LocationActionSide;
  */
 public class UserDataAccess {
 
+    private static final TextHelper TEXT_HELPER = new TextHelper();
     private final UserDAO dao;
     private final ContactsHelper contactsHelper;
 
@@ -44,7 +46,7 @@ public class UserDataAccess {
 
     public void addUser(LocationActionSide user) {
         UserEntity entity = new UserEntity();
-        entity.phone = user.getPhone();
+        entity.phone = TEXT_HELPER.normalizePhone(user.getPhone());
         new AddUserTask(dao).execute(entity);
     }
 

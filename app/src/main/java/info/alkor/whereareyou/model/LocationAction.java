@@ -2,7 +2,6 @@ package info.alkor.whereareyou.model;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.Serializable;
 
@@ -17,31 +16,14 @@ public class LocationAction implements Serializable {
     private Location location;
     private DeliveryStatus deliveryStatus = DeliveryStatus.PENDING;
 
-    public LocationAction(@NonNull LocationActionSide side) {
-        this.actionId = nextId();
-        this.side = side;
-    }
-
-    LocationAction(long actionId) {
+    public LocationAction(long actionId, @NonNull LocationActionSide side, @NonNull State state) {
         this.actionId = actionId;
-        this.side = null;
-    }
-
-    private static long nextId() {
-        return System.currentTimeMillis();
-    }
-
-    private String name() {
-        return "action " + actionId;
+        this.side = side;
+        this.state = state;
     }
 
     public State getState() {
         return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-        Log.i(name(), "state " + state);
     }
 
     public LocationActionSide getSide() {
@@ -50,6 +32,10 @@ public class LocationAction implements Serializable {
 
     public long getActionId() {
         return actionId;
+    }
+
+    public void setActionId(long actionId) {
+        this.actionId = actionId;
     }
 
     public String getDisplayName() {
@@ -66,7 +52,6 @@ public class LocationAction implements Serializable {
 
     public void setLocation(Location location) {
         this.location = location;
-        Log.i(name(), "location set");
     }
 
     public long getLocationTime() {
@@ -79,7 +64,6 @@ public class LocationAction implements Serializable {
 
     public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
-        Log.i(name(), "delivery " + deliveryStatus);
     }
 
     public enum State {

@@ -9,6 +9,7 @@ import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.android.receivers.AbstractLocationUpdateReceiver;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.settings.LocationSettings;
 
 /**
@@ -20,29 +21,32 @@ public class LocationUpdateReceiver extends AbstractLocationUpdateReceiver {
     private LocationSettings settings;
     private LocationQueryFlowManager flowManager;
     private Handler async;
+    private ActionDataAccess actionDataAccess;
 
     @Override
     public void onReceive(WhereAreYouContext context, long actionId, Location location) {
         async = context.getDelayedHandler();
         settings = context.getApplicationSettings().getLocationSettings();
         flowManager = context.getLocationQueryFlowManager();
+        actionDataAccess = context.getActionDataAccess();
 
         LocationAction action = flowManager.updateLocation(actionId, location);
         if (action != null) {
-            scheduleUpdateSending(action);
+            scheduleUpdateSending(actionId);
         }
     }
 
-    private void scheduleUpdateSending(LocationAction action) {
-        async.postDelayed(makeRunnable(action), getMaxAwaitingTime());
+    private void scheduleUpdateSending(long actionId) {
+        async.postDelayed(makeRunnable(actionId), getMaxAwaitingTime());
     }
 
-    private Runnable makeRunnable(final LocationAction action) {
+    private Runnable makeRunnable(final long actionId) {
         return new Runnable() {
             @Override
             public void run() {
+                final LocationAction action = actionDataAccess.find(actionId).get();
                 if (now() - action.getLocationTime() < getMaxAwaitingTime()) {
-                    scheduleUpdateSending(action);
+                    scheduleUpdateSending(actionId);
                 } else {
                     async.removeCallbacks(this);
                     flowManager.sendLocationResponse(action);

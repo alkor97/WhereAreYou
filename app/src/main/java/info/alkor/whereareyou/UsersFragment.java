@@ -19,15 +19,15 @@ import java.util.Collections;
 import java.util.List;
 
 import info.alkor.whereareyou.model.LocationActionSide;
-import info.alkor.whereareyou.ui.LocationSideAdapter;
-import info.alkor.whereareyou.ui.LocationSideViewModel;
+import info.alkor.whereareyou.ui.LocationSidesAdapter;
+import info.alkor.whereareyou.ui.LocationSidesViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class UsersFragment extends Fragment {
 
-    private LocationSideAdapter adapter;
+    private LocationSidesAdapter adapter;
 
     public UsersFragment() {
         // Required empty public constructor
@@ -44,10 +44,10 @@ public class UsersFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new LocationSideAdapter();
+        adapter = new LocationSidesAdapter();
         rv.setAdapter(adapter);
 
-        LocationSideViewModel viewModel = getViewModel();
+        LocationSidesViewModel viewModel = getViewModel();
         if (viewModel != null) {
             viewModel.getModel().observe(this, new SidesObserver());
         }
@@ -55,10 +55,10 @@ public class UsersFragment extends Fragment {
         return view;
     }
 
-    private LocationSideViewModel getViewModel() {
+    private LocationSidesViewModel getViewModel() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            return ViewModelProviders.of(getActivity()).get(LocationSideViewModel.class);
+            return ViewModelProviders.of(getActivity()).get(LocationSidesViewModel.class);
         }
         return null;
     }

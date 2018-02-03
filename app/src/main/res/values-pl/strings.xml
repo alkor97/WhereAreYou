@@ -10,4 +10,5 @@
 	<string name="actions_title">Akcje</string>
 	<string name="users_title">Użytkownicy</string>
 	<string name="confirm_delete_phone">Usunąć telefon %2$s (%1$s)?</string>
+    <string name="confirm_delete_action">Usunąć tę akcję?</string>
 </resources>

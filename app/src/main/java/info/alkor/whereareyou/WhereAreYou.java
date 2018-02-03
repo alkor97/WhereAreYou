@@ -14,10 +14,8 @@ import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.location.link.LocationLinkParser;
 import info.alkor.whereareyou.model.LocationAction;
-import info.alkor.whereareyou.model.LocationActionList;
-import info.alkor.whereareyou.model.LocationActionManager;
-import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.persistence.AppDatabase;
 import info.alkor.whereareyou.persistence.UserDataAccess;
 import info.alkor.whereareyou.senders.LocationActionsSender;
@@ -41,9 +39,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     private final Handler handler = new Handler();
     private ApplicationSettings applicationSettings;
-    private LocationActions model;
     private LocationActionsSender actionsSender;
-    private LocationActionManager modelManager;
     private ContactsHelper contactsHelper;
     private LocationQueryFlowManager flowManager;
     private LocationParser locationParser;
@@ -51,16 +47,15 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private LocationUpdateRequester locationUpdateRequester;
     private AppDatabase database;
     private UserDataAccess userDataAccess;
+    private ActionDataAccess actionDataAccess;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         applicationSettings = new ApplicationSettings(new LocationSettings(), new UserManager());
-        model = new LocationActionList();
 
         actionsSender = new LocationActionsSender(this);
-        modelManager = new LocationActionManager(model, actionsSender);
     }
 
     @Override
@@ -77,20 +72,8 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     @NonNull
     @Override
-    public LocationActions getModel() {
-        return model;
-    }
-
-    @NonNull
-    @Override
     public LocationActionsSender getActionsSender() {
         return actionsSender;
-    }
-
-    @NonNull
-    @Override
-    public LocationActionManager getModelManager() {
-        return modelManager;
     }
 
     @NonNull
@@ -170,5 +153,14 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
             userDataAccess = new UserDataAccess(this);
         }
         return userDataAccess;
+    }
+
+    @NonNull
+    @Override
+    public ActionDataAccess getActionDataAccess() {
+        if (actionDataAccess == null) {
+            actionDataAccess = new ActionDataAccess(this);
+        }
+        return actionDataAccess;
     }
 }

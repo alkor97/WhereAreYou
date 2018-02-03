@@ -1,85 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    card_view:cardBackgroundColor="#FEFEFE"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="action"
+            type="info.alkor.whereareyou.ui.LocationActionViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="2dp"
+        card_view:cardBackgroundColor="#FEFEFE"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{action.time}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:gravity="end"
+                    android:text="@{action.deliveryStatus}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/row_main_time_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:text="@{action.side}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
             <TextView
-                android:id="@+id/row_main_delivery_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="9"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:layout_weight="1"
+                android:text="@{action.coordinates}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="@{action.coordinatesVisibility}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{action.altitude}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="@{action.altitudeVisibility}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{action.accuracy}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="@{action.accuracyVisibility}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{action.bearing}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="@{action.bearingVisibility}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{action.speed}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="@{action.speedVisibility}" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/row_main_phone_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <TextView
-            android:id="@+id/row_main_coordinates_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/row_main_altitude_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/row_main_accuracy_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/row_main_azimuth_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/row_main_speed_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="gone" />
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</layout>

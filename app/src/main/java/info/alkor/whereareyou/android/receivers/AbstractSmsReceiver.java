@@ -7,6 +7,7 @@ import android.provider.Telephony;
 import android.telephony.SmsMessage;
 
 import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.common.TextHelper;
 
 /**
  * Abstract SMS receiver targeted for this application.
@@ -14,11 +15,13 @@ import info.alkor.whereareyou.WhereAreYouContext;
  */
 public abstract class AbstractSmsReceiver extends AbstractBroadcastReceiver {
 
+    private static final TextHelper TEXT_HELPER = new TextHelper();
+
     @Override
     protected void onReceive(WhereAreYouContext context, Intent intent) {
         final SmsMessage message = getMessage(intent);
         if (message != null) {
-            final String phone = message.getOriginatingAddress();
+            final String phone = TEXT_HELPER.normalizePhone(message.getOriginatingAddress());
             final String name = context.getContactsHelper().getDisplayName(phone);
             onReceive(context, phone, name, message.getMessageBody());
         }

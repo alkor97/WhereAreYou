@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.common.TextHelper;
+import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.senders.LocationRequestSender;
 import info.alkor.whereareyou.senders.LocationResponseSender;
 
@@ -16,9 +17,9 @@ import info.alkor.whereareyou.senders.LocationResponseSender;
 public class LocationQueryFlowManager {
 
     private static final TextHelper TEXT_HELPER = new TextHelper();
-    private final LocationActionManager modelManager;
     private final LocationRequestSender requestSender;
     private final LocationResponseSender responseSender;
+    private final ActionDataAccess actionsAccess;
 
     /**
      * Instance constructor.
@@ -26,9 +27,9 @@ public class LocationQueryFlowManager {
      * @param context application context
      */
     public LocationQueryFlowManager(@NonNull WhereAreYouContext context) {
-        this.modelManager = context.getModelManager();
         this.requestSender = new LocationRequestSender(context);
         this.responseSender = new LocationResponseSender(context);
+        this.actionsAccess = context.getActionDataAccess();
     }
 
     /**
@@ -41,14 +42,8 @@ public class LocationQueryFlowManager {
     public @Nullable
     LocationAction onIncomingLocationRequest(@NonNull String phone, @Nullable String name) {
         final LocationActionSide requester = LocationActionSide.requester(TEXT_HELPER.normalizePhone(phone), name);
-        final LocationAction action = modelManager.findRelatedNotFulfilledAction(requester);
-        if (action == null) {
-            final LocationAction locationRequest = new LocationAction(requester);
-            locationRequest.setState(LocationAction.State.QUERIED);
-            modelManager.addAction(locationRequest);
-            return locationRequest;
-        }
-        return null;
+        final LocationAction locationRequest = new LocationAction(0, requester, LocationAction.State.QUERIED);
+        return actionsAccess.addAction(locationRequest).get();
     }
 
     /**
@@ -60,11 +55,10 @@ public class LocationQueryFlowManager {
      */
     public void onIncomingLocationResponse(@NonNull String phone, @Nullable String name, @NonNull Location location) {
         final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER.normalizePhone(phone), name);
-        final LocationAction action = modelManager.findRelatedNotFulfilledAction(provider);
+        final LocationAction action = actionsAccess.findRelatedNotFulfilledAction(provider).get();
         if (action != null) {
-            action.setLocation(location);
-            action.setState(LocationAction.State.ANSWERED);
-            modelManager.changeAction(action);
+            actionsAccess.setState(action.getActionId(), LocationAction.State.ANSWERED);
+            actionsAccess.updateLocation(action.getActionId(), location);
         }
     }
 
@@ -76,9 +70,7 @@ public class LocationQueryFlowManager {
      */
     public void sendLocationRequest(@NonNull String phone, @Nullable String name) {
         final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER.normalizePhone(phone), name);
-        final LocationAction action = new LocationAction(provider);
-        action.setState(LocationAction.State.QUERIED);
-        modelManager.addAction(action);
+        LocationAction action = actionsAccess.addAction(new LocationAction(0, provider, LocationAction.State.QUERIED)).get();
         requestSender.sendLocationRequest(action);
     }
 
@@ -91,14 +83,13 @@ public class LocationQueryFlowManager {
      */
     public @Nullable
     LocationAction updateLocation(long actionId, @NonNull Location location) {
-        final LocationAction action = modelManager.find(actionId);
+        LocationAction action = actionsAccess.find(actionId).get();
         if (action != null
                 && action.getState() != LocationAction.State.ANSWERED
                 && (action.getLocation() == null
                 || location.getAccuracy() < action.getLocation().getAccuracy()
                 || newerByAtLeastOneMinute(action.getLocation(), location))) {
-            action.setLocation(location);
-            modelManager.changeAction(action);
+            action = actionsAccess.updateLocation(actionId, location).get();
         }
         return action;
     }
@@ -114,9 +105,7 @@ public class LocationQueryFlowManager {
      */
     public void sendLocationResponse(@NonNull LocationAction action) {
         if (action.getState() != LocationAction.State.ANSWERED) {
-            action.setState(LocationAction.State.ANSWERED);
-            modelManager.changeAction(action);
-
+            action = actionsAccess.setState(action.getActionId(), LocationAction.State.ANSWERED).get();
             responseSender.sendLocationResponse(action);
         }
     }
@@ -128,10 +117,6 @@ public class LocationQueryFlowManager {
      * @param status   SMS message delivery status
      */
     public void updateDeliveryStatus(long actionId, @NonNull LocationAction.DeliveryStatus status) {
-        final LocationAction action = modelManager.find(actionId);
-        if (action != null) {
-            action.setDeliveryStatus(status);
-            modelManager.changeAction(action);
-        }
+        actionsAccess.updateDeliveryStatus(actionId, status);
     }
 }

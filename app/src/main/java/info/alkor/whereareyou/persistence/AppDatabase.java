@@ -7,8 +7,10 @@ import android.arch.persistence.room.RoomDatabase;
  * Application database.
  * Created by Marlena on 2018-01-25.
  */
-@Database(entities = {UserEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {UserEntity.class, ActionEntity.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserDAO getUserDAO();
+
+    public abstract ActionDAO getActionsDAO();
 }

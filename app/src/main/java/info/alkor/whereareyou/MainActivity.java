@@ -22,11 +22,13 @@ import android.view.View;
 import java.util.Map;
 
 import info.alkor.whereareyou.common.PermissionRequester;
+import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.model.LocationActionSide;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_CONTACT_TO_LOCATE = 1;
+    private static final TextHelper TEXT_HELPER = new TextHelper();
     private final PermissionRequester permissionRequester = new PermissionRequester(this);
 
     @Override
@@ -86,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (cursor.moveToFirst()) {
                     String displayName = cursor.getString(displayNameIdx);
-                    String phoneNumber = cursor.getString(phoneIdx).replaceAll("\\s+", "");
-                    confirmLocationRequest(displayName, phoneNumber);
+                    String normalizedPhoneNumber = TEXT_HELPER.normalizePhone(cursor.getString(phoneIdx));
+                    confirmLocationRequest(displayName, normalizedPhoneNumber);
                 }
             }
         } finally {
@@ -97,22 +99,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void confirmLocationRequest(final String displayName, final String phoneNumber) {
-        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setMessage
-                (getString(R.string.confirm_locate_phone, displayName, phoneNumber))
+    private void confirmLocationRequest(final String displayName, final String normalizedPhoneNumber) {
+        final String formattedPhone = TEXT_HELPER.formatPhone(normalizedPhoneNumber);
+        final String message = getString(R.string.confirm_locate_phone, displayName, formattedPhone);
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        requestLocationOf(phoneNumber, displayName);
+                        requestLocationOf(normalizedPhoneNumber, displayName);
                     }
                 }).setNegativeButton(android.R.string.no, null).show();
     }
 
-    private void requestLocationOf(String phoneNumber, String displayName) {
+    private void requestLocationOf(String normalizedPhoneNumber, String displayName) {
         getWhereAreYouContext()
                 .getLocationQueryFlowManager()
-                .sendLocationRequest(phoneNumber, displayName);
-        getWhereAreYouContext().getUserDataAccess().addUser(LocationActionSide.provider(phoneNumber, displayName));
+                .sendLocationRequest(normalizedPhoneNumber, displayName);
+        getWhereAreYouContext()
+                .getUserDataAccess()
+                .addUser(LocationActionSide.provider(normalizedPhoneNumber, displayName));
     }
 
     private WhereAreYouContext getWhereAreYouContext() {

@@ -16,22 +16,22 @@ import info.alkor.whereareyou.model.LocationActionSide;
  * Location side recycler view adapter.
  * Created by Marlena on 2018-01-23.
  */
-public class LocationSideAdapter extends RecyclerView.Adapter<LocationSideViewHolder> {
+public class LocationSidesAdapter extends RecyclerView.Adapter<LocationSidesViewHolder> {
 
     private List<LocationActionSide> sides = Collections.emptyList();
 
     @Override
-    public LocationSideViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LocationSidesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.row_side,
                 parent,
                 false);
-        return new LocationSideViewHolder(viewDataBinding);
+        return new LocationSidesViewHolder(viewDataBinding);
     }
 
     @Override
-    public void onBindViewHolder(LocationSideViewHolder holder, int position) {
+    public void onBindViewHolder(LocationSidesViewHolder holder, int position) {
         holder.bind(sides.get(position));
     }
 

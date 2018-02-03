@@ -28,6 +28,6 @@ public class TextHelper {
     }
 
     public String normalizePhone(String phone) {
-        return phone.replaceAll("^0+", "+");
+        return phone.replaceAll("\\s+", "").replaceAll("^0+", "+");
     }
 }

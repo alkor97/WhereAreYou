@@ -1,29 +1,26 @@
 package info.alkor.whereareyou.ui;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
-
-import java.util.List;
-
-import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.model.LocationActionSide;
 
 /**
- * Location action sides view model.
- * Created by Marlena on 2018-01-23.
+ * Location side view model.
+ * Created by Marlena on 2018-01-30.
  */
-public class LocationSideViewModel extends AndroidViewModel {
+public class LocationSideViewModel {
 
-    private final LiveData<List<LocationActionSide>> model;
+    private static final TextHelper TEXT_HELPER = new TextHelper();
+    private final LocationActionSide side;
 
-    public LocationSideViewModel(@NonNull Application application) {
-        super(application);
-        model = ((WhereAreYouContext) application).getUserDataAccess().getAllUsers();
+    LocationSideViewModel(LocationActionSide side) {
+        this.side = side;
     }
 
-    public LiveData<List<LocationActionSide>> getModel() {
-        return model;
+    public String getName() {
+        if (side.getName() != null) {
+            return side.getName() + " (" + TEXT_HELPER.formatPhone(side.getPhone()) + ")";
+        } else {
+            return TEXT_HELPER.formatPhone(side.getPhone());
+        }
     }
 }

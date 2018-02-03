@@ -6,9 +6,8 @@ import android.support.annotation.NonNull;
 import info.alkor.whereareyou.android.ContactsHelper;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.model.LocationAction;
-import info.alkor.whereareyou.model.LocationActionManager;
-import info.alkor.whereareyou.model.LocationActions;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
+import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.persistence.AppDatabase;
 import info.alkor.whereareyou.persistence.UserDataAccess;
 import info.alkor.whereareyou.senders.LocationActionsSender;
@@ -24,13 +23,7 @@ public interface WhereAreYouContext {
     ApplicationSettings getApplicationSettings();
 
     @NonNull
-    LocationActions getModel();
-
-    @NonNull
     LocationActionsSender getActionsSender();
-
-    @NonNull
-    LocationActionManager getModelManager();
 
     @NonNull
     Handler getDelayedHandler();
@@ -56,6 +49,9 @@ public interface WhereAreYouContext {
 
     @NonNull
     UserDataAccess getUserDataAccess();
+
+    @NonNull
+    ActionDataAccess getActionDataAccess();
 
     @NonNull
     AppDatabase getDatabase();

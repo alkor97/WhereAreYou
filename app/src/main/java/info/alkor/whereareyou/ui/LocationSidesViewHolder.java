@@ -6,26 +6,29 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import info.alkor.whereareyou.BR;
 import info.alkor.whereareyou.R;
 import info.alkor.whereareyou.WhereAreYouContext;
+import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.model.LocationActionSide;
 
 /**
  * Location side view holder.
  * Created by Marlena on 2018-01-23.
  */
-class LocationSideViewHolder extends RecyclerView.ViewHolder {
+class LocationSidesViewHolder extends RecyclerView.ViewHolder {
 
+    private static final TextHelper TEXT_HELPER = new TextHelper();
     private final ViewDataBinding binding;
 
-    LocationSideViewHolder(ViewDataBinding binding) {
+    LocationSidesViewHolder(ViewDataBinding binding) {
         super(binding.getRoot());
         this.binding = binding;
     }
 
     void bind(LocationActionSide side) {
-        binding.setVariable(BR.side, side);
+        binding.setVariable(BR.side, new LocationSideViewModel(side));
         binding.executePendingBindings();
         super.itemView.setOnClickListener(new ClickHandler(side, binding.getRoot().getContext()));
         super.itemView.setOnLongClickListener(new LongClickHandler(side, binding.getRoot().getContext()));
@@ -48,7 +51,7 @@ class LocationSideViewHolder extends RecyclerView.ViewHolder {
         @Override
         public void onClick(View view) {
             new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setMessage
-                    (context.getString(R.string.confirm_locate_phone, side.getName(), side.getPhone()))
+                    (context.getString(R.string.confirm_locate_phone, side.getName(), TEXT_HELPER.formatPhone(side.getPhone())))
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -73,7 +76,7 @@ class LocationSideViewHolder extends RecyclerView.ViewHolder {
         @Override
         public boolean onLongClick(View view) {
             new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setMessage
-                    (context.getString(R.string.confirm_delete_phone, side.getName(), side.getPhone()))
+                    (context.getString(R.string.confirm_delete_phone, side.getName(), TEXT_HELPER.formatPhone(side.getPhone())))
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
