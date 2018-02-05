@@ -49,24 +49,35 @@ public class LocationActionViewModel {
         return "…";
     }
 
-    private String getSideType() {
+    public String getSideType() {
         if (action.getSide().getType() == LocationActionSide.Type.REQUESTER) {
             return "➘";
         }
         return "➚";
     }
 
+    private String getFormattedPhone() {
+        return TEXT_HELPER.formatPhone(action.getPhoneNumber());
+    }
+
+    private String getDecoratedPhone() {
+        return String.format("✆  %s", getFormattedPhone());
+    }
+
     public String getSide() {
         if (action.getDisplayName() != null) {
-            return context.getString(R.string.row_main_side,
-                    action.getDisplayName(),
-                    TEXT_HELPER.formatPhone(action.getPhoneNumber()),
-                    getSideType());
+            return action.getDisplayName();
         } else {
-            return context.getString(R.string.row_main_side_without_name,
-                    TEXT_HELPER.formatPhone(action.getPhoneNumber()),
-                    getSideType());
+            return getFormattedPhone();
         }
+    }
+
+    public String getPhone() {
+        return action.getDisplayName() != null ? getDecoratedPhone() : "";
+    }
+
+    public int getPhoneVisibility() {
+        return toVisibility(action.getDisplayName() != null);
     }
 
     private int toVisibility(boolean has) {

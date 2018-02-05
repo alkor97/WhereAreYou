@@ -1,5 +1,7 @@
 package info.alkor.whereareyou.ui;
 
+import android.view.View;
+
 import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.model.LocationActionSide;
 
@@ -16,11 +18,31 @@ public class LocationSideViewModel {
         this.side = side;
     }
 
-    public String getName() {
-        if (side.getName() != null) {
-            return side.getName() + " (" + TEXT_HELPER.formatPhone(side.getPhone()) + ")";
+    public String getNameOrPhone() {
+        if (hasName()) {
+            return side.getName();
         } else {
-            return TEXT_HELPER.formatPhone(side.getPhone());
+            return getFormattedPhone();
         }
+    }
+
+    public int getPhoneVisibility() {
+        return hasName() ? View.VISIBLE : View.GONE;
+    }
+
+    private String getFormattedPhone() {
+        return TEXT_HELPER.formatPhone(side.getPhone());
+    }
+
+    private String getDecoratedPhone() {
+        return String.format("✆  %s", getFormattedPhone());
+    }
+
+    public String getPhone() {
+        return getDecoratedPhone();
+    }
+
+    private boolean hasName() {
+        return side.getName() != null;
     }
 }
