@@ -46,6 +46,9 @@ public interface ActionDAO {
     @Query("UPDATE actions SET state = :state WHERE id = :id")
     void updateState(long id, LocationAction.State state);
 
-    @Query("UPDATE actions SET time = :time, provider = :provider, latitude = :latitude, longitude = :longitude, altitude = :altitude, accuracy = :accuracy, bearing = :bearing, speed = :speed WHERE id = :id")
-    void updateLocation(long id, long time, String provider, double latitude, double longitude, Double altitude, Float accuracy, Float bearing, Float speed);
+    @Query("UPDATE actions SET time = :time, provider = :provider, latitude = :latitude, " +
+            "longitude = :longitude, altitude = :altitude, accuracy = :accuracy, bearing = " +
+            ":bearing, speed = :speed WHERE id = :id")
+    void updateLocation(long id, long time, String provider, double latitude, double longitude,
+                        Double altitude, Float accuracy, Float bearing, Float speed);
 }

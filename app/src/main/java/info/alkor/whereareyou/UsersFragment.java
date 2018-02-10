@@ -84,7 +84,8 @@ public class UsersFragment extends Fragment {
         private final List<LocationActionSide> oldList;
         private final List<LocationActionSide> newList;
 
-        LocationSideDiffCallback(@NonNull List<LocationActionSide> oldList, @NonNull List<LocationActionSide> newList) {
+        LocationSideDiffCallback(@NonNull List<LocationActionSide> oldList, @NonNull
+                List<LocationActionSide> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }
@@ -101,7 +102,8 @@ public class UsersFragment extends Fragment {
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).getPhone().equals(newList.get(newItemPosition).getPhone());
+            return oldList.get(oldItemPosition).getPhone().equals(newList.get(newItemPosition)
+                    .getPhone());
         }
 
         @Override

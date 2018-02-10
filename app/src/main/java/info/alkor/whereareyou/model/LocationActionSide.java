@@ -18,7 +18,7 @@ public class LocationActionSide implements Serializable {
         this.type = type;
     }
 
-    public static LocationActionSide requester(String phone, String name) {
+    static LocationActionSide requester(String phone, String name) {
         return new LocationActionSide(phone, name, Type.REQUESTER);
     }
 
@@ -45,7 +45,8 @@ public class LocationActionSide implements Serializable {
 
         LocationActionSide that = (LocationActionSide) o;
 
-        return (name != null ? name.equals(that.name) : that.name == null) && (phone != null ? phone.equals(that.phone) : that.phone == null) && type == that.type;
+        return (name != null ? name.equals(that.name) : that.name == null) && (phone != null ?
+                phone.equals(that.phone) : that.phone == null) && type == that.type;
     }
 
     @Override

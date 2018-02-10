@@ -23,7 +23,8 @@ public class LocationUpdateRequester {
     }
 
     @SuppressLint("MissingPermission")
-    public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action) {
+    public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction
+            action) {
         if (locationManager == null) {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }

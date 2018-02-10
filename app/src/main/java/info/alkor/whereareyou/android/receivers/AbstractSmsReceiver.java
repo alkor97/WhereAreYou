@@ -27,7 +27,8 @@ public abstract class AbstractSmsReceiver extends AbstractBroadcastReceiver {
         }
     }
 
-    public abstract void onReceive(WhereAreYouContext context, String originatingAddress, String originatingName, String messageBody);
+    public abstract void onReceive(WhereAreYouContext context, String originatingAddress, String
+            originatingName, String messageBody);
 
     private SmsMessage getMessage(Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

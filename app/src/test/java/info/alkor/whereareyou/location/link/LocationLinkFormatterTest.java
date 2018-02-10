@@ -21,7 +21,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LocationLinkFormatterTest {
 
-    private final LocationLinkFormatter formatter = new LocationLinkFormatter("http://alkor.info/loc/?q=");
+    private final LocationLinkFormatter formatter = new LocationLinkFormatter("http://alkor" +
+            ".info/loc/?q=");
     private final LocationHelpers helpers = new LocationHelpers();
     private final Date now = new Date();
     private final String date = helpers.formatDate(now);

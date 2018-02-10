@@ -18,12 +18,10 @@ import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.persistence.AppDatabase;
 import info.alkor.whereareyou.persistence.UserDataAccess;
-import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.senders.LocationUpdateRequester;
 import info.alkor.whereareyou.senders.SmsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 import info.alkor.whereareyou.settings.LocationSettings;
-import info.alkor.whereareyou.settings.UserManager;
 
 /**
  * Main application context.
@@ -39,7 +37,6 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
 
     private final Handler handler = new Handler();
     private ApplicationSettings applicationSettings;
-    private LocationActionsSender actionsSender;
     private ContactsHelper contactsHelper;
     private LocationQueryFlowManager flowManager;
     private LocationParser locationParser;
@@ -53,9 +50,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     public void onCreate() {
         super.onCreate();
 
-        applicationSettings = new ApplicationSettings(new LocationSettings(), new UserManager());
-
-        actionsSender = new LocationActionsSender(this);
+        applicationSettings = new ApplicationSettings(new LocationSettings());
     }
 
     @Override
@@ -68,12 +63,6 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     @Override
     public ApplicationSettings getApplicationSettings() {
         return applicationSettings;
-    }
-
-    @NonNull
-    @Override
-    public LocationActionsSender getActionsSender() {
-        return actionsSender;
     }
 
     @NonNull
@@ -107,7 +96,8 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     }
 
     @Override
-    public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction action) {
+    public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction
+            action) {
         if (locationUpdateRequester == null) {
             locationUpdateRequester = new LocationUpdateRequester(this);
         }

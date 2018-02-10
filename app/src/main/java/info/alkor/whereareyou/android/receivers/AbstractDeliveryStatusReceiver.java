@@ -14,9 +14,11 @@ public abstract class AbstractDeliveryStatusReceiver extends AbstractBroadcastRe
     @Override
     protected void onReceive(WhereAreYouContext context, Intent intent) {
         long actionId = intent.getLongExtra(LocationBroadcasts.ACTION_ID, 0);
-        LocationAction.DeliveryStatus status = LocationAction.DeliveryStatus.valueOf(intent.getStringExtra(LocationBroadcasts.DELIVERY_STATUS));
+        LocationAction.DeliveryStatus status = LocationAction.DeliveryStatus.valueOf(intent
+                .getStringExtra(LocationBroadcasts.DELIVERY_STATUS));
         onReceive(context, actionId, status);
     }
 
-    public abstract void onReceive(WhereAreYouContext context, long actionId, LocationAction.DeliveryStatus deliveryStatus);
+    public abstract void onReceive(WhereAreYouContext context, long actionId, LocationAction
+            .DeliveryStatus deliveryStatus);
 }

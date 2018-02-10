@@ -26,7 +26,8 @@ public class MinimalLocationParserTest {
     private final String date = helpers.formatDate(now);
     @Mock
     private Location location;
-    private final LocationParser parser = new MinimalLocationParser(new MinimalLocationParser.LocationFactory() {
+    private final LocationParser parser = new MinimalLocationParser(new MinimalLocationParser
+            .LocationFactory() {
         @Override
         public Location create(String provider) {
             return location;

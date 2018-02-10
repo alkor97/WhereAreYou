@@ -10,7 +10,6 @@ import info.alkor.whereareyou.model.LocationQueryFlowManager;
 import info.alkor.whereareyou.persistence.ActionDataAccess;
 import info.alkor.whereareyou.persistence.AppDatabase;
 import info.alkor.whereareyou.persistence.UserDataAccess;
-import info.alkor.whereareyou.senders.LocationActionsSender;
 import info.alkor.whereareyou.settings.ApplicationSettings;
 
 /**
@@ -21,9 +20,6 @@ public interface WhereAreYouContext {
 
     @NonNull
     ApplicationSettings getApplicationSettings();
-
-    @NonNull
-    LocationActionsSender getActionsSender();
 
     @NonNull
     Handler getDelayedHandler();

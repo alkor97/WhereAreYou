@@ -36,12 +36,15 @@ public class MainFlowsInstrumentedTest {
 
     @Before
     public void beforeTest() {
-        db = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(), AppDatabase.class).build();
-        context = (WhereAreYouContext) InstrumentationRegistry.getTargetContext().getApplicationContext();
+        db = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(), AppDatabase
+                .class).build();
+        context = (WhereAreYouContext) InstrumentationRegistry.getTargetContext()
+                .getApplicationContext();
         access = context.getActionDataAccess();
         clearDatabase();
 
-        context.getApplicationSettings().getLocationSettings().setMaxAwaitTimeForBetterLocationAccuracy(1, TimeUnit.SECONDS);
+        context.getApplicationSettings().getLocationSettings()
+                .setMaxAwaitTimeForBetterLocationAccuracy(1, TimeUnit.SECONDS);
     }
 
     @After
@@ -99,7 +102,8 @@ public class MainFlowsInstrumentedTest {
         action = action();
         assertEquals(LocationAction.DeliveryStatus.DELIVERED, action.getDeliveryStatus());
 
-        smsReceiver.onReceive(context, phone, name, pathPrefix + "20180104064313,gps,53.438412,14.574477,157,65,3,1");
+        smsReceiver.onReceive(context, phone, name, pathPrefix + "20180104064313,gps,53.438412," +
+                "14.574477,157,65,3,1");
         assertEquals(1, actionsSize());
         action = action();
         assertNotNull(action);

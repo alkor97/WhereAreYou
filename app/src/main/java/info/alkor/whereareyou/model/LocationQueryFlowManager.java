@@ -41,8 +41,10 @@ public class LocationQueryFlowManager {
      */
     public @Nullable
     LocationAction onIncomingLocationRequest(@NonNull String phone, @Nullable String name) {
-        final LocationActionSide requester = LocationActionSide.requester(TEXT_HELPER.normalizePhone(phone), name);
-        final LocationAction locationRequest = new LocationAction(0, requester, LocationAction.State.QUERIED);
+        final LocationActionSide requester = LocationActionSide.requester(TEXT_HELPER
+                .normalizePhone(phone), name);
+        final LocationAction locationRequest = new LocationAction(0, requester, LocationAction
+                .State.QUERIED);
         return actionsAccess.addAction(locationRequest).get();
     }
 
@@ -53,8 +55,10 @@ public class LocationQueryFlowManager {
      * @param name     provider's display name
      * @param location related location
      */
-    public void onIncomingLocationResponse(@NonNull String phone, @Nullable String name, @NonNull Location location) {
-        final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER.normalizePhone(phone), name);
+    public void onIncomingLocationResponse(@NonNull String phone, @Nullable String name, @NonNull
+            Location location) {
+        final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER
+                .normalizePhone(phone), name);
         final LocationAction action = actionsAccess.findRelatedNotFulfilledAction(provider).get();
         if (action != null) {
             actionsAccess.setState(action.getActionId(), LocationAction.State.ANSWERED);
@@ -69,8 +73,10 @@ public class LocationQueryFlowManager {
      * @param name  provider's display name
      */
     public void sendLocationRequest(@NonNull String phone, @Nullable String name) {
-        final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER.normalizePhone(phone), name);
-        LocationAction action = actionsAccess.addAction(new LocationAction(0, provider, LocationAction.State.QUERIED)).get();
+        final LocationActionSide provider = LocationActionSide.provider(TEXT_HELPER
+                .normalizePhone(phone), name);
+        LocationAction action = actionsAccess.addAction(new LocationAction(0, provider,
+                LocationAction.State.QUERIED)).get();
         requestSender.sendLocationRequest(action);
     }
 
@@ -94,7 +100,8 @@ public class LocationQueryFlowManager {
         return action;
     }
 
-    private boolean newerByAtLeastOneMinute(@NonNull Location reference, @NonNull Location proposal) {
+    private boolean newerByAtLeastOneMinute(@NonNull Location reference, @NonNull Location
+            proposal) {
         return Math.abs(proposal.getTime() - reference.getTime()) > 60_000;
     }
 
@@ -105,7 +112,8 @@ public class LocationQueryFlowManager {
      */
     public void sendLocationResponse(@NonNull LocationAction action) {
         if (action.getState() != LocationAction.State.ANSWERED) {
-            action = actionsAccess.setState(action.getActionId(), LocationAction.State.ANSWERED).get();
+            action = actionsAccess.setState(action.getActionId(), LocationAction.State.ANSWERED)
+                    .get();
             responseSender.sendLocationResponse(action);
         }
     }

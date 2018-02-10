@@ -17,7 +17,8 @@ import info.alkor.whereareyou.settings.LocationSettings;
 public class SmsReceiver extends AbstractSmsReceiver {
 
     @Override
-    public void onReceive(WhereAreYouContext context, String phone, String name, String messageBody) {
+    public void onReceive(WhereAreYouContext context, String phone, String name, String
+            messageBody) {
         LocationQueryFlowManager flowManager = context.getLocationQueryFlowManager();
 
         final String command = context.getLocationRequestCommand();
@@ -25,11 +26,13 @@ public class SmsReceiver extends AbstractSmsReceiver {
             LocationAction action = flowManager.onIncomingLocationRequest(phone, name);
             // null action means that request of same side is already being processed
             if (action != null) {
-                LocationSettings locationSettings = context.getApplicationSettings().getLocationSettings();
+                LocationSettings locationSettings = context.getApplicationSettings()
+                        .getLocationSettings();
 
                 for (String provider : locationSettings.getLocationProviders()) {
                     if (!context.requestSingleLocationUpdate(provider, action)) {
-                        Log.e("location", String.format("unable to request location update for provider %s", provider));
+                        Log.e("location", String.format("unable to request location update for " +
+                                "provider %s", provider));
                     }
                 }
             }

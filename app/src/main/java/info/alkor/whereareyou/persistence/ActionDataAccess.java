@@ -32,7 +32,8 @@ public class ActionDataAccess {
     }
 
     public LiveData<List<LocationAction>> getAllActionsLive() {
-        return Transformations.map(dao.getAllActionsLive(), new Function<List<ActionEntity>, List<LocationAction>>() {
+        return Transformations.map(dao.getAllActionsLive(), new Function<List<ActionEntity>,
+                List<LocationAction>>() {
             @Override
             public List<LocationAction> apply(List<ActionEntity> input) {
                 List<LocationAction> result = new ArrayList<>();
@@ -63,7 +64,8 @@ public class ActionDataAccess {
     }
 
     private LocationAction convert(ActionEntity entity) {
-        LocationAction action = new LocationAction(entity.id, convert(entity.phone, entity.type), entity.state);
+        LocationAction action = new LocationAction(entity.id, convert(entity.phone, entity.type),
+                entity.state);
         action.setLocation(convert(entity.location));
         action.setDeliveryStatus(entity.delivery);
         return action;
@@ -148,7 +150,8 @@ public class ActionDataAccess {
     }
 
     public Provider<LocationAction> updateLocation(long actionId, Location location) {
-        return new UpdatedActionProvider<>(new UpdateLocationTask(dao, convert(location)).execute(actionId));
+        return new UpdatedActionProvider<>(new UpdateLocationTask(dao, convert(location)).execute
+                (actionId));
     }
 
     public Provider<LocationAction> find(long actionId) {
@@ -156,11 +159,14 @@ public class ActionDataAccess {
     }
 
     public Provider<LocationAction> findRelatedNotFulfilledAction(LocationActionSide provider) {
-        return new UpdatedActionProvider<>(new FindRelatedNotFulfilledActionTask(dao).execute(provider.getPhone()));
+        return new UpdatedActionProvider<>(new FindRelatedNotFulfilledActionTask(dao).execute
+                (provider.getPhone()));
     }
 
-    public Provider<LocationAction> updateDeliveryStatus(long actionId, LocationAction.DeliveryStatus deliveryStatus) {
-        return new UpdatedActionProvider<>(new UpdateDeliveryStatusTask(dao, deliveryStatus).execute(actionId));
+    public Provider<LocationAction> updateDeliveryStatus(long actionId, LocationAction
+            .DeliveryStatus deliveryStatus) {
+        return new UpdatedActionProvider<>(new UpdateDeliveryStatusTask(dao, deliveryStatus)
+                .execute(actionId));
     }
 
     public interface Provider<E> {
@@ -241,7 +247,8 @@ public class ActionDataAccess {
         }
     }
 
-    private static class FindRelatedNotFulfilledActionTask extends AsyncTask<String, Void, ActionEntity> {
+    private static class FindRelatedNotFulfilledActionTask extends AsyncTask<String, Void,
+            ActionEntity> {
 
         private final ActionDAO dao;
 
@@ -251,7 +258,8 @@ public class ActionDataAccess {
 
         @Override
         protected ActionEntity doInBackground(String... strings) {
-            return dao.findRelatedNotFulfilledAction(LocationAction.State.QUERIED, strings[0]).get(0);
+            return dao.findRelatedNotFulfilledAction(LocationAction.State.QUERIED, strings[0])
+                    .get(0);
         }
     }
 

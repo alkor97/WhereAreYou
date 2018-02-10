@@ -8,45 +8,45 @@ import android.support.annotation.NonNull;
  */
 public enum DistanceUnit {
 
-	METERS {
-		protected float getMeterMultiplier() {
-			return 1.0f;
-		}
-	},
+    METERS {
+        protected float getMeterMultiplier() {
+            return 1.0f;
+        }
+    },
 
-	KILOMETERS {
-		protected float getMeterMultiplier() {
-			return 1000.0f;
-		}
-	},
+    KILOMETERS {
+        protected float getMeterMultiplier() {
+            return 1000.0f;
+        }
+    },
 
-	FEET {
-		protected float getMeterMultiplier() {
-			return 0.3048f;
-		}
-	},
+    FEET {
+        protected float getMeterMultiplier() {
+            return 0.3048f;
+        }
+    },
 
-	YARDS {
-		protected float getMeterMultiplier() {
-			return 0.9144f;
-		}
-	},
+    YARDS {
+        protected float getMeterMultiplier() {
+            return 0.9144f;
+        }
+    },
 
-	MILES {
-		protected float getMeterMultiplier() {
-			return 1609.344f;
-		}
-	};
+    MILES {
+        protected float getMeterMultiplier() {
+            return 1609.344f;
+        }
+    };
 
-	public final float from(float value, @NonNull DistanceUnit unit) {
-		return unit.toMeters(value) / getMeterMultiplier();
-	}
+    public final float from(float value, @NonNull DistanceUnit unit) {
+        return unit.toMeters(value) / getMeterMultiplier();
+    }
 
-	private float toMeters(float value) {
-		return value * getMeterMultiplier();
-	}
+    private float toMeters(float value) {
+        return value * getMeterMultiplier();
+    }
 
-	protected float getMeterMultiplier() {
-		throw new AbstractMethodError();
-	}
+    protected float getMeterMultiplier() {
+        throw new AbstractMethodError();
+    }
 }

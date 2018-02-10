@@ -20,6 +20,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="info.alkor.whereareyou" />
             </intent-filter>
@@ -35,6 +36,7 @@
                     android:scheme="@string/scheme" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".receivers.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">
@@ -46,14 +48,14 @@
             android:name=".receivers.LocationUpdateReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="LOCATION_UPDATED"/>
+                <action android:name="LOCATION_UPDATED" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".receivers.MessageDeliveryStatusReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="DELIVERY_STATUS_UPDATED"/>
+                <action android:name="DELIVERY_STATUS_UPDATED" />
             </intent-filter>
         </receiver>
     </application>

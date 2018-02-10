@@ -26,7 +26,8 @@ public class LocationLinkParserTest {
     private final String date = helpers.formatDate(now);
     @Mock
     private Location location;
-    private final LocationParser parser = new LocationLinkParser("http://alkor.info/loc/?q=", new LocationLinkParser.LocationFactory() {
+    private final LocationParser parser = new LocationLinkParser("http://alkor.info/loc/?q=", new
+            LocationLinkParser.LocationFactory() {
         @Override
         public Location create(String provider) {
             return location;

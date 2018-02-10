@@ -16,54 +16,54 @@ import java.util.Set;
  */
 class PermissionAccessor {
 
-	private final Context context;
+    private final Context context;
 
-	PermissionAccessor(Context context) {
-		this.context = context;
-	}
+    PermissionAccessor(Context context) {
+        this.context = context;
+    }
 
-	protected Context getContext() {
-		return context;
-	}
+    protected Context getContext() {
+        return context;
+    }
 
-	public boolean allPermissionsGranted() {
-		return filterDeniedPermissions(retrievePermissions()).isEmpty();
-	}
+    public boolean allPermissionsGranted() {
+        return filterDeniedPermissions(retrievePermissions()).isEmpty();
+    }
 
-	String[] retrievePermissions() {
-		try {
-			return getContext().getPackageManager().getPackageInfo(getContext().getPackageName(),
-					PackageManager.GET_PERMISSIONS).requestedPermissions;
-		} catch (PackageManager.NameNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+    String[] retrievePermissions() {
+        try {
+            return getContext().getPackageManager().getPackageInfo(getContext().getPackageName(),
+                    PackageManager.GET_PERMISSIONS).requestedPermissions;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-	private boolean isPermissionGranted(@NonNull String permission) {
-		return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager
-				.PERMISSION_GRANTED;
-	}
+    private boolean isPermissionGranted(@NonNull String permission) {
+        return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager
+                .PERMISSION_GRANTED;
+    }
 
-	private boolean isPermissionDenied(@NonNull String permission) {
-		return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager
-				.PERMISSION_DENIED;
-	}
+    private boolean isPermissionDenied(@NonNull String permission) {
+        return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager
+                .PERMISSION_DENIED;
+    }
 
-	Map<String, Boolean> toMap(String... permissions) {
-		Map<String, Boolean> map = new HashMap<>();
-		for (String permission : permissions) {
-			map.put(permission, isPermissionGranted(permission));
-		}
-		return map;
-	}
+    Map<String, Boolean> toMap(String... permissions) {
+        Map<String, Boolean> map = new HashMap<>();
+        for (String permission : permissions) {
+            map.put(permission, isPermissionGranted(permission));
+        }
+        return map;
+    }
 
-	Set<String> filterDeniedPermissions(String... permissions) {
-		final Set<String> deniedPermissions = new HashSet<>();
-		for (String permission : permissions) {
-			if (isPermissionDenied(permission)) {
-				deniedPermissions.add(permission);
-			}
-		}
-		return deniedPermissions;
-	}
+    Set<String> filterDeniedPermissions(String... permissions) {
+        final Set<String> deniedPermissions = new HashSet<>();
+        for (String permission : permissions) {
+            if (isPermissionDenied(permission)) {
+                deniedPermissions.add(permission);
+            }
+        }
+        return deniedPermissions;
+    }
 }

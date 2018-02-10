@@ -34,10 +34,6 @@ public class LocationAction implements Serializable {
         return actionId;
     }
 
-    public void setActionId(long actionId) {
-        this.actionId = actionId;
-    }
-
     public String getDisplayName() {
         return side.getName();
     }

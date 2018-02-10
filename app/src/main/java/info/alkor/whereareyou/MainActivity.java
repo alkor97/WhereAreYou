@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        SectionsPagerAdapter viewPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter viewPagerAdapter = new SectionsPagerAdapter
+                (getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = findViewById(R.id.container);
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (cursor.moveToFirst()) {
                     String displayName = cursor.getString(displayNameIdx);
-                    String normalizedPhoneNumber = TEXT_HELPER.normalizePhone(cursor.getString(phoneIdx));
+                    String normalizedPhoneNumber = TEXT_HELPER.normalizePhone(cursor.getString
+                            (phoneIdx));
                     confirmLocationRequest(displayName, normalizedPhoneNumber);
                 }
             }
@@ -101,9 +103,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void confirmLocationRequest(final String displayName, final String normalizedPhoneNumber) {
+    private void confirmLocationRequest(final String displayName, final String
+            normalizedPhoneNumber) {
         final String formattedPhone = TEXT_HELPER.formatPhone(normalizedPhoneNumber);
-        final String message = getString(R.string.confirm_locate_phone, displayName, formattedPhone);
+        final String message = getString(R.string.confirm_locate_phone, displayName,
+                formattedPhone);
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setMessage(message)

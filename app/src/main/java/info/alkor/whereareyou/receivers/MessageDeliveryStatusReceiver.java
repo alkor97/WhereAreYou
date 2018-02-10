@@ -10,7 +10,8 @@ import info.alkor.whereareyou.model.LocationAction;
  */
 public class MessageDeliveryStatusReceiver extends AbstractDeliveryStatusReceiver {
     @Override
-    public void onReceive(WhereAreYouContext context, long actionId, LocationAction.DeliveryStatus deliveryStatus) {
+    public void onReceive(WhereAreYouContext context, long actionId, LocationAction
+            .DeliveryStatus deliveryStatus) {
         context.getLocationQueryFlowManager().updateDeliveryStatus(actionId, deliveryStatus);
     }
 }

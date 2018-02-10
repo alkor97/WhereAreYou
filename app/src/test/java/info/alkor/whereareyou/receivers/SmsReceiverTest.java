@@ -71,13 +71,16 @@ public class SmsReceiverTest {
 
         when(mockContext.getLocationRequestCommand()).thenReturn("Hey, where are you?");
         when(mockContext.getLocationParser()).thenReturn(mockLocationParser);
-        when(mockLocationParser.parse(message)).thenThrow(new LocationParser.ParsingException("error"));
+        when(mockLocationParser.parse(message)).thenThrow(new LocationParser.ParsingException
+                ("error"));
 
         receiver.onReceive(mockContext, "123", "abc", message);
 
         verify(mockFlowManager, never()).onIncomingLocationRequest(anyString(), anyString());
-        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
-        verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction.class));
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any
+                (Location.class));
+        verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction
+                .class));
     }
 
     @Test
@@ -93,7 +96,8 @@ public class SmsReceiverTest {
         when(mockApplicationSettings.getLocationSettings()).thenReturn(mockLocationSettings);
         when(mockLocationSettings.getLocationProviders()).thenReturn(providers);
         for (String provider : providers) {
-            when(mockContext.requestSingleLocationUpdate(provider, mockLocationAction)).thenReturn(true);
+            when(mockContext.requestSingleLocationUpdate(provider, mockLocationAction))
+                    .thenReturn(true);
         }
 
         receiver.onReceive(mockContext, phone, name, command);
@@ -102,7 +106,8 @@ public class SmsReceiverTest {
         for (String provider : providers) {
             verify(mockContext).requestSingleLocationUpdate(provider, mockLocationAction);
         }
-        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any
+                (Location.class));
     }
 
     @Test
@@ -119,8 +124,10 @@ public class SmsReceiverTest {
         receiver.onReceive(mockContext, phone, name, command);
 
         verify(mockFlowManager, only()).onIncomingLocationRequest(phone, name);
-        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
-        verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction.class));
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any
+                (Location.class));
+        verify(mockContext, never()).requestSingleLocationUpdate(anyString(), any(LocationAction
+                .class));
     }
 
     @Test
@@ -136,14 +143,16 @@ public class SmsReceiverTest {
 
         when(mockContext.getLocationRequestCommand()).thenReturn(command);
         for (int i = 0; i < phones.length; ++i) {
-            when(mockFlowManager.onIncomingLocationRequest(phones[i], names[i])).thenReturn(actions[i]);
+            when(mockFlowManager.onIncomingLocationRequest(phones[i], names[i])).thenReturn
+                    (actions[i]);
         }
         when(mockContext.getApplicationSettings()).thenReturn(mockApplicationSettings);
         when(mockApplicationSettings.getLocationSettings()).thenReturn(mockLocationSettings);
         when(mockLocationSettings.getLocationProviders()).thenReturn(providers);
         for (int i = 0; i < phones.length; ++i) {
             for (String provider : providers) {
-                when(mockContext.requestSingleLocationUpdate(provider, actions[i])).thenReturn(true);
+                when(mockContext.requestSingleLocationUpdate(provider, actions[i])).thenReturn
+                        (true);
             }
         }
 
@@ -157,7 +166,8 @@ public class SmsReceiverTest {
                 verify(mockContext).requestSingleLocationUpdate(provider, actions[i]);
             }
         }
-        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any(Location.class));
+        verify(mockFlowManager, never()).onIncomingLocationResponse(anyString(), anyString(), any
+                (Location.class));
     }
 
     @Test

@@ -16,15 +16,19 @@ public class SmsSender {
 
     private final SmsManager manager = SmsManager.getDefault();
 
-    public void send(@NonNull Context context, @NonNull LocationAction action, @NonNull String content) {
+    public void send(@NonNull Context context, @NonNull LocationAction action, @NonNull String
+            content) {
         manager.sendTextMessage(action.getPhoneNumber(),
                 null,
                 content,
-                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus.SENT),
-                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus.DELIVERED));
+                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
+                        .SENT),
+                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
+                        .DELIVERED));
     }
 
-    private PendingIntent getDeliveryIntent(Context context, long actionId, LocationAction.DeliveryStatus status) {
+    private PendingIntent getDeliveryIntent(Context context, long actionId, LocationAction
+            .DeliveryStatus status) {
         Intent intent = new Intent(LocationBroadcasts.DELIVERY_STATUS_UPDATED);
         intent.putExtra(LocationBroadcasts.ACTION_ID, actionId);
         intent.putExtra(LocationBroadcasts.DELIVERY_STATUS, status.name());
@@ -32,6 +36,7 @@ public class SmsSender {
     }
 
     private PendingIntent getPendingIntent(Context context, Intent intent) {
-        return PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

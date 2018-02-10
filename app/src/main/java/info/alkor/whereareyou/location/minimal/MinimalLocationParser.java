@@ -38,31 +38,36 @@ public class MinimalLocationParser implements LocationParser {
         final Location location = factory.create("");
         assign(location, entries, MinimalLocationFormat.Field.PROVIDER, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 location.setProvider(entries[field.getPosition()]);
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.DATE, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 location.setTime(h.parseDate(entries[field.getPosition()]).getTime());
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.LATITUDE, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 location.setLatitude(h.parseCoordinate(entries[field.getPosition()]));
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.LONGITUDE, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 location.setLongitude(h.parseCoordinate(entries[field.getPosition()]));
             }
         });
         assign(location, entries, MinimalLocationFormat.Field.ALTITUDE, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 try {
                     location.setAltitude(h.parseAltitude(entries[field.getPosition()]));
                 } catch (ParseException e) {
@@ -72,7 +77,8 @@ public class MinimalLocationParser implements LocationParser {
         });
         assign(location, entries, MinimalLocationFormat.Field.ACCURACY, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 try {
                     location.setAccuracy(h.parseAccuracy(entries[field.getPosition()]));
                 } catch (ParseException e) {
@@ -82,7 +88,8 @@ public class MinimalLocationParser implements LocationParser {
         });
         assign(location, entries, MinimalLocationFormat.Field.BEARING, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 try {
                     location.setBearing(h.parseBearing(entries[field.getPosition()]));
                 } catch (ParseException e) {
@@ -92,7 +99,8 @@ public class MinimalLocationParser implements LocationParser {
         });
         assign(location, entries, MinimalLocationFormat.Field.SPEED, new Assigner() {
             @Override
-            public void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException {
+            public void assign(Location location, String[] entries, MinimalLocationFormat.Field
+                    field) throws ParseException {
                 try {
                     location.setSpeed(h.parseSpeed(entries[field.getPosition()]));
                 } catch (ParseException e) {
@@ -103,7 +111,8 @@ public class MinimalLocationParser implements LocationParser {
         return location;
     }
 
-    private void assign(Location location, String[] entries, MinimalLocationFormat.Field field, Assigner assigner) throws ParsingException {
+    private void assign(Location location, String[] entries, MinimalLocationFormat.Field field,
+                        Assigner assigner) throws ParsingException {
         final int position = field.getPosition();
         if (entries.length > position) {
             final String entry = entries[position];
@@ -122,6 +131,7 @@ public class MinimalLocationParser implements LocationParser {
     }
 
     private interface Assigner {
-        void assign(Location location, String[] entries, MinimalLocationFormat.Field field) throws ParseException;
+        void assign(Location location, String[] entries, MinimalLocationFormat.Field field)
+                throws ParseException;
     }
 }

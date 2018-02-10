@@ -37,7 +37,8 @@ public class LocationActionViewModel {
         final long time = action.getLocation() != null
                 ? action.getLocation().getTime()
                 : System.currentTimeMillis();
-        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_WEEKDAY);
+        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE | DateUtils
+                .FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_WEEKDAY);
     }
 
     public String getDeliveryStatus() {

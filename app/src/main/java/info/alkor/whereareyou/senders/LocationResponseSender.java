@@ -19,7 +19,8 @@ public class LocationResponseSender {
     }
 
     public void sendLocationResponse(@NonNull LocationAction action) {
-        LocationLinkFormatter responseFormatter = new LocationLinkFormatter(context.getSmsLinkPrefix());
+        LocationLinkFormatter responseFormatter = new LocationLinkFormatter(context
+                .getSmsLinkPrefix());
         context.sendSms(action, responseFormatter.format(action.getLocation()));
     }
 }
