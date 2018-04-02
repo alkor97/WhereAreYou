@@ -16,10 +16,13 @@ import info.alkor.whereareyou.model.LocationAction;
 public class LocationUpdateRequester {
 
     private final Context context;
+    private final Class<?> locationUpdateReceiverClass;
     private LocationManager locationManager;
 
-    public LocationUpdateRequester(@NonNull Context context) {
+    public LocationUpdateRequester(@NonNull Context context, @NonNull Class<?>
+            locationUpdateReceiverClass) {
         this.context = context;
+        this.locationUpdateReceiverClass = locationUpdateReceiverClass;
     }
 
     @SuppressLint("MissingPermission")
@@ -29,7 +32,8 @@ public class LocationUpdateRequester {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
         if (locationManager != null) {
-            Intent intent = new Intent(LocationBroadcasts.LOCATION_UPDATED);
+            Intent intent = new Intent(context, locationUpdateReceiverClass);
+            intent.setAction(LocationBroadcasts.LOCATION_UPDATED);
             intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
 
             locationManager.requestSingleUpdate(provider, getPendingIntent(intent));

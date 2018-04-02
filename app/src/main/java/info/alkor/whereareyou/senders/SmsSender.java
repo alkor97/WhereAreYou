@@ -15,8 +15,15 @@ import info.alkor.whereareyou.model.LocationAction;
 public class SmsSender {
 
     private final SmsManager manager = SmsManager.getDefault();
+    private final Context context;
+    private final Class<?> messageDeliveryReceiverClass;
 
-    public void send(@NonNull Context context, @NonNull LocationAction action, @NonNull String
+    public SmsSender(@NonNull Context context, @NonNull Class<?> messageDeliveryReceiverClass) {
+        this.context = context;
+        this.messageDeliveryReceiverClass = messageDeliveryReceiverClass;
+    }
+
+    public void send(@NonNull LocationAction action, @NonNull String
             content) {
         manager.sendTextMessage(action.getPhoneNumber(),
                 null,
@@ -29,7 +36,8 @@ public class SmsSender {
 
     private PendingIntent getDeliveryIntent(Context context, long actionId, LocationAction
             .DeliveryStatus status) {
-        Intent intent = new Intent(LocationBroadcasts.DELIVERY_STATUS_UPDATED);
+        Intent intent = new Intent(context, messageDeliveryReceiverClass);
+        intent.setAction(LocationBroadcasts.DELIVERY_STATUS_UPDATED);
         intent.putExtra(LocationBroadcasts.ACTION_ID, actionId);
         intent.putExtra(LocationBroadcasts.DELIVERY_STATUS, status.name());
         return getPendingIntent(context, intent);

@@ -99,7 +99,8 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction
             action) {
         if (locationUpdateRequester == null) {
-            locationUpdateRequester = new LocationUpdateRequester(this);
+            locationUpdateRequester = new LocationUpdateRequester(this, info.alkor.whereareyou
+                    .receivers.LocationUpdateReceiver.class);
         }
         return locationUpdateRequester.requestSingleLocationUpdate(provider, action);
     }
@@ -107,9 +108,10 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     @Override
     public void sendSms(@NonNull LocationAction action, @NonNull String content) {
         if (smsSender == null) {
-            smsSender = new SmsSender();
+            smsSender = new SmsSender(this, info.alkor.whereareyou.receivers
+                    .MessageDeliveryStatusReceiver.class);
         }
-        smsSender.send(this, action, content);
+        smsSender.send(action, content);
     }
 
     @NonNull

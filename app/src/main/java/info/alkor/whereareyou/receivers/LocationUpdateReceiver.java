@@ -3,6 +3,7 @@ package info.alkor.whereareyou.receivers;
 import android.location.Location;
 import android.os.Handler;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import info.alkor.whereareyou.WhereAreYouContext;
@@ -44,12 +45,14 @@ public class LocationUpdateReceiver extends AbstractLocationUpdateReceiver {
         return new Runnable() {
             @Override
             public void run() {
-                final LocationAction action = actionDataAccess.find(actionId).get();
-                if (now() - action.getLocationTime() < getMaxAwaitingTime()) {
-                    scheduleUpdateSending(actionId);
-                } else {
-                    async.removeCallbacks(this);
-                    flowManager.sendLocationResponse(action);
+                final List<LocationAction> actions = actionDataAccess.find(actionId).get();
+                for (LocationAction action : actions) {
+                    if (now() - action.getLocationTime() < getMaxAwaitingTime()) {
+                        scheduleUpdateSending(actionId);
+                    } else {
+                        async.removeCallbacks(this);
+                        flowManager.sendLocationResponse(action);
+                    }
                 }
             }
         };

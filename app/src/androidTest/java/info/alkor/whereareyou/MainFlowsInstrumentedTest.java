@@ -81,7 +81,7 @@ public class MainFlowsInstrumentedTest {
         assertEquals(name, action.getDisplayName());
         assertEquals(LocationAction.DeliveryStatus.PENDING, action.getDeliveryStatus());
 
-        updateLocation(action, location());
+        updateLocation(action.getActionId(), location());
     }
 
     @Test
@@ -125,24 +125,23 @@ public class MainFlowsInstrumentedTest {
         assertEquals(a.getSpeed(), b.getSpeed(), 1.0f);
     }
 
-    private void updateLocation(LocationAction action, Location location) throws Exception {
-        locationUpdateReceiver.onReceive(context, action.getActionId(), location);
+    private void updateLocation(long actionId, Location location) throws Exception {
+        locationUpdateReceiver.onReceive(context, actionId, location);
 
         assertEquals(1, actionsSize());
-        action = access.find(action.getActionId()).get();
-        assertNotNull(action);
-        checkLocationsEquality(location, action.getLocation());
+        for (LocationAction action : access.find(actionId).get()) {
+            checkLocationsEquality(location, action.getLocation());
+        }
 
         // wait slightly longer for another location update
         Thread.sleep(500 + context.getApplicationSettings().getLocationSettings()
                 .getMaxAwaitTimeForBetterLocationAccuracy(TimeUnit.MILLISECONDS));
 
         assertEquals(1, actionsSize());
-        action = access.find(action.getActionId()).get();
-        assertNotNull(action);
-
-        assertEquals(LocationAction.State.ANSWERED, action.getState());
-        assertEquals(LocationAction.DeliveryStatus.DELIVERED, action.getDeliveryStatus());
+        for (LocationAction action : access.find(actionId).get()) {
+            assertEquals(LocationAction.State.ANSWERED, action.getState());
+            assertEquals(LocationAction.DeliveryStatus.DELIVERED, action.getDeliveryStatus());
+        }
     }
 
     private Location location() {
