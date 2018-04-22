@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 public class TextHelper {
 
     public String formatPhone(String phone) {
+        phone = phone.replaceAll("\\s+", "");
         StringBuilder result = new StringBuilder();
         int last = 0;
         for (int i = 0; i < phone.length() / 3; ++i) {

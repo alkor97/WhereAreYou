@@ -1,14 +1,12 @@
 package info.alkor.whereareyou.common;
 
-import android.content.pm.PackageManager;
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,8 +17,8 @@ public class PermissionRequester extends PermissionAccessor {
 
     private final Set<ResultCallback> requests = new HashSet<>();
 
-    public PermissionRequester(@NonNull AppCompatActivity activity) {
-        super(activity);
+    public PermissionRequester(@NonNull Context context) {
+        super(context);
     }
 
     protected AppCompatActivity getContext() {
@@ -37,11 +35,11 @@ public class PermissionRequester extends PermissionAccessor {
                         String[deniedPermissions.size()]), resultCallback.hashCode());
             } else {
                 // execute callback immediately
-                resultCallback.onPermissionRequestResult(toMap(permissions));
+                resultCallback.onPermissionRequestResult(getPermissions());
             }
         } else {
             // execute callback immediately
-            resultCallback.onPermissionRequestResult(toMap(permissions));
+            resultCallback.onPermissionRequestResult(getPermissions());
         }
     }
 
@@ -49,26 +47,20 @@ public class PermissionRequester extends PermissionAccessor {
         requestPermissions(resultCallback, retrievePermissions());
     }
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         Iterator<ResultCallback> it = requests.iterator();
         while (it.hasNext()) {
             ResultCallback request = it.next();
-            Map<String, Boolean> map = new HashMap<>();
             if (requestCode == request.hashCode()) {
-                int idx = -1;
-                for (String permission : permissions) {
-                    ++idx;
-                    map.put(permission, grantResults[idx] == PackageManager.PERMISSION_GRANTED);
-                }
                 it.remove();
-                request.onPermissionRequestResult(map);
+                request.onPermissionRequestResult(getPermissions());
                 break;
             }
         }
     }
 
     public interface ResultCallback {
-        void onPermissionRequestResult(Map<String, Boolean> permissionRequestResult);
+        void onPermissionRequestResult(@NonNull Set<String> permissionRequestResult);
     }
 }

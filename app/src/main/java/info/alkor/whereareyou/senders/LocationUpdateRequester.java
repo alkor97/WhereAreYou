@@ -1,11 +1,11 @@
 package info.alkor.whereareyou.senders;
 
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import info.alkor.whereareyou.model.LocationAction;
 
@@ -25,7 +25,6 @@ public class LocationUpdateRequester {
         this.locationUpdateReceiverClass = locationUpdateReceiverClass;
     }
 
-    @SuppressLint("MissingPermission")
     public boolean requestSingleLocationUpdate(@NonNull String provider, @NonNull LocationAction
             action) {
         if (locationManager == null) {
@@ -36,8 +35,15 @@ public class LocationUpdateRequester {
             intent.setAction(LocationBroadcasts.LOCATION_UPDATED);
             intent.putExtra(LocationBroadcasts.ACTION_ID, action.getActionId());
 
-            locationManager.requestSingleUpdate(provider, getPendingIntent(intent));
+            try {
+                locationManager.requestSingleUpdate(provider, getPendingIntent(intent));
+            } catch (SecurityException e) {
+                Log.e("permission", "No location permissions granted!");
+                return false;
+            }
             return true;
+        } else {
+            Log.e("service", "No location service available!");
         }
         return false;
     }

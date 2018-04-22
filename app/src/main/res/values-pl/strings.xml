@@ -4,6 +4,7 @@
     <string name="one_time_location_request">Hej, gdzie jesteś?</string>
     <string name="locate_phone">Zlokalizuj osobę&#8230;</string>
     <string name="confirm_locate_phone">Zlokalizować telefon %2$s (%1$s)?</string>
+    <string name="confirm_locate_phone_no_name">Zlokalizować telefon %1$s?</string>
     <string name="app_crash_report_query">Aplikacja \'&appName;\' niespodziewanie zatrzymała się. Czy chcesz wysłać raport to autora?</string>
     <string name="app_yes">Tak</string>
     <string name="app_no">Nie</string>

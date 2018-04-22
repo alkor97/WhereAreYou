@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.telephony.SmsManager;
+import android.util.Log;
 
 import info.alkor.whereareyou.model.LocationAction;
 
@@ -25,13 +26,17 @@ public class SmsSender {
 
     public void send(@NonNull LocationAction action, @NonNull String
             content) {
-        manager.sendTextMessage(action.getPhoneNumber(),
-                null,
-                content,
-                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
-                        .SENT),
-                getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
-                        .DELIVERED));
+        try {
+            manager.sendTextMessage(action.getPhoneNumber(),
+                    null,
+                    content,
+                    getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
+                            .SENT),
+                    getDeliveryIntent(context, action.getActionId(), LocationAction.DeliveryStatus
+                            .DELIVERED));
+        } catch (SecurityException e) {
+            Log.e("permission", "No SMS sending permissions granted!");
+        }
     }
 
     private PendingIntent getDeliveryIntent(Context context, long actionId, LocationAction

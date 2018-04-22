@@ -1,9 +1,12 @@
 package info.alkor.whereareyou;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.common.PermissionRequester;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.model.LocationAction;
 import info.alkor.whereareyou.model.LocationQueryFlowManager;
@@ -51,4 +54,7 @@ public interface WhereAreYouContext {
 
     @NonNull
     AppDatabase getDatabase();
+
+    @NonNull
+    PermissionRequester getPermissionRequester(@Nullable Context context);
 }

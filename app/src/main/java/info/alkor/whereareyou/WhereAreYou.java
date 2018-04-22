@@ -5,12 +5,14 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraDialog;
 import org.acra.annotation.AcraMailSender;
 
 import info.alkor.whereareyou.android.ContactsHelper;
+import info.alkor.whereareyou.common.PermissionRequester;
 import info.alkor.whereareyou.location.LocationParser;
 import info.alkor.whereareyou.location.link.LocationLinkParser;
 import info.alkor.whereareyou.model.LocationAction;
@@ -45,6 +47,7 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
     private AppDatabase database;
     private UserDataAccess userDataAccess;
     private ActionDataAccess actionDataAccess;
+    private PermissionRequester permissionRequester;
 
     @Override
     public void onCreate() {
@@ -155,5 +158,14 @@ public class WhereAreYou extends Application implements WhereAreYouContext {
             actionDataAccess = new ActionDataAccess(this);
         }
         return actionDataAccess;
+    }
+
+    @NonNull
+    @Override
+    public PermissionRequester getPermissionRequester(@Nullable Context context) {
+        if (permissionRequester == null && context != null) {
+            permissionRequester = new PermissionRequester(context);
+        }
+        return permissionRequester;
     }
 }

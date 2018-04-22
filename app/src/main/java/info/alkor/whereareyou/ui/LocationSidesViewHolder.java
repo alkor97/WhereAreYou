@@ -51,17 +51,9 @@ class LocationSidesViewHolder extends RecyclerView.ViewHolder {
 
         @Override
         public void onClick(View view) {
-            new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setMessage
-                    (context.getString(R.string.confirm_locate_phone, side.getName(), TEXT_HELPER
-                            .formatPhone(side.getPhone())))
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            getWhereAreYouContext()
-                                    .getLocationQueryFlowManager()
-                                    .sendLocationRequest(side.getPhone(), side.getName());
-                        }
-                    }).setNegativeButton(android.R.string.no, null).show();
+            LocationRequestHelper helper = new LocationRequestHelper(context,
+                    getWhereAreYouContext().getPermissionRequester(null));
+            helper.confirmLocationRequest(side.getName(), side.getPhone());
         }
     }
 
