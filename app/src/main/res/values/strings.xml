@@ -10,7 +10,7 @@
     <string name="row_main_accuracy" translatable="false">ø %1$.0f %2$s</string>
     <string name="row_main_azimuth" translatable="false">%1$.0f° (%2$s)</string>
     <string name="row_main_speed" translatable="false">➟ %1$.0f %2$s</string>
-    <string name="location_presenter_url" translatable="false">&scheme;://&pathPrefix;.&host;/?q=%s,%s,%s</string>
+    <string name="location_presenter_url" translatable="false">&scheme;://&pathPrefix;.&host;/?q=%s,%s,%s,%s</string>
     <string name="app_crash_report_query">Application \'&appName;\' has crashed. Do you want to send report to developer?</string>
     <string name="app_yes">Yes</string>
     <string name="app_no">No</string>

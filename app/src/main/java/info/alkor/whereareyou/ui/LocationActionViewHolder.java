@@ -15,6 +15,7 @@ import info.alkor.whereareyou.WhereAreYouContext;
 import info.alkor.whereareyou.common.TextHelper;
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
 import info.alkor.whereareyou.model.LocationAction;
+import info.alkor.whereareyou.settings.Private;
 
 /**
  * Location action view holder.
@@ -55,7 +56,8 @@ class LocationActionViewHolder extends RecyclerView.ViewHolder {
             String template = context.getString(R.string.location_presenter_url,
                     FORMATTER.format(model.getLocation()),
                     TEXT_HELPER.encode(model.getPhoneNumber()),
-                    TEXT_HELPER.encode(model.getDisplayName()));
+                    TEXT_HELPER.encode(model.getDisplayName()),
+                    Private.GOOGLE_API_KEY);
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(template));
         }
 

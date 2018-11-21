@@ -4,7 +4,6 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import info.alkor.whereareyou.location.minimal.MinimalLocationFormatter;
-import info.alkor.whereareyou.settings.Private;
 
 /**
  * Link-based location formatter.
@@ -21,9 +20,8 @@ public class LocationLinkFormatter extends MinimalLocationFormatter {
     @Override
     @NonNull
     public String format(@NonNull Location location) {
-        return String.format("%s%s%s",
+        return String.format("%s%s",
                 smsLinkPrefix,
-                super.format(location),
-                Private.GOOGLE_API_KEY);
+                super.format(location));
     }
 }
