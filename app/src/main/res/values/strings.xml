@@ -17,7 +17,7 @@
     <string name="scheme" translatable="false">&scheme;</string>
     <string name="host" translatable="false">&host;</string>
     <string name="pathPrefix" translatable="false">/&pathPrefix;</string>
-    <string name="smsLinkPrefix" translatable="false">&scheme;://&host;/&pathPrefix;/?q=</string>
+    <string name="smsLinkPrefix" translatable="false">&scheme;://&pathPrefix;.&host;/?q=</string>
     <string name="actions_title">Actions</string>
     <string name="users_title">Users</string>
     <string name="confirm_delete_phone">Delete %1$s\'s phone %2$s?</string>

@@ -26,7 +26,7 @@ public class LocationLinkParserTest {
     private final String date = helpers.formatDate(now);
     @Mock
     private Location location;
-    private final LocationParser parser = new LocationLinkParser("http://alkor.info/loc/?q=", new
+    private final LocationParser parser = new LocationLinkParser("http://loc.alkor.info/?q=", new
             LocationLinkParser.LocationFactory() {
         @Override
         public Location create(String provider) {
@@ -40,12 +40,12 @@ public class LocationLinkParserTest {
 
     @Test(expected = LocationParser.ParsingException.class)
     public void testMismatchedPrefix() throws LocationParser.ParsingException {
-        parser.parse("https://aalkor.info/loca/?q=" + date + ",gps,53.1,14.3,15,2,93,13.1");
+        parser.parse("https://loca.aalkor.info/?q=" + date + ",gps,53.1,14.3,15,2,93,13.1");
     }
 
     @Test
     public void testParseContentWithSpeed() throws LocationParser.ParsingException {
-        parser.parse("http://alkor.info/loc/?q=" + date + ",gps,53.1,14.3,15,2,93,13.1");
+        parser.parse("http://loc.alkor.info/?q=" + date + ",gps,53.1,14.3,15,2,93,13.1");
         verify(location).setProvider("gps");
         verify(location).setTime(getTime());
         verify(location).setLongitude(14.3);

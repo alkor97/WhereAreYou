@@ -48,7 +48,7 @@ public class LocationLinkFormatterTest {
         when(location.hasSpeed()).thenReturn(true);
         when(location.getSpeed()).thenReturn(12.3f);
 
-        final String expected = "http://alkor.info/loc/?q=" + date + ",gps,53.1,14.3,56,3,134,12.3";
+        final String expected = "http://loc.alkor.info/?q=" + date + ",gps,53.1,14.3,56,3,134,12.3";
         assertEquals(expected, formatter.format(location));
     }
 }
